@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html data-bs-theme="light" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Sistema de Indicadores Educativos</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/Nunito.css' %}">
+    <link rel="stylesheet" href="{% static 'fonts/fontawesome-all.min.css' %}">
+</head>
+
+<body id="page-top">
+    <div id="wrapper">
+        <nav class="navbar align-items-start p-0 sidebar sidebar-dark accordion bg-gradient-primary navbar-dark" style="background: var(--bs-secondary);">
+            <div class="container-fluid d-flex flex-column p-0"><a class="navbar-brand d-flex justify-content-center align-items-center m-0 sidebar-brand" href="#">
+                    <div class="mx-3 sidebar-brand-text"><span>SEDUZAC</span></div>
+                </a>
+                <hr class="my-0 sidebar-divider">
+                <ul class="navbar-nav text-light" id="accordionSidebar">
+                    <li class="nav-item"><a class="nav-link" href="{% url 'blank' %}"><i class="fas fa-tachometer-alt"></i><span>Inicio</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'iniciar_sesion' %}"><i class="far fa-user-circle"></i><span>Iniciar Sesión</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'panel_datos' %}"><i class="fas fa-table"></i><span>Panel de Datos</span></a></li>
+                </ul>
+                <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
+            </div>
+        </nav>
+        <div class="d-flex flex-column" id="content-wrapper">
+            <div id="content">
+                <nav class="navbar navbar-expand bg-white shadow d-xl-flex mb-4 topbar">
+                    <div class="container-fluid">
+                        <div></div><a class="navbar-brand" href="#">Sistema de Indicadores Educativos del Estado de Zacatecas</a>
+                        <div></div>
+                    </div>
+                </nav>
+            {% block funcionalidad %}
+            
+            {% endblock %}
+            </div>
+            <footer class="bg-white sticky-footer">
+                <div class="container my-auto">
+                    <div class="text-center my-auto copyright"><span>Copyright © SEDUZAC 2025</span></div>
+                </div>
+            </footer>
+        </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
+    </div>
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/bs-init.js' %}"></script>
+    <script src="{% static 'js/theme.js' %}"></script>
+</body>
+
+</html>

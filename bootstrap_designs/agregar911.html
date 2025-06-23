@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html data-bs-theme="light" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Dashboard - Brand</title>
+    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css?h=b77f9cffb8754f588d38677bb31f69bb">
+    <link rel="stylesheet" href="/assets/fonts/fontawesome-all.min.css?h=d10b6c02b76e3f05c44d290530be1366">
+    <link rel="stylesheet" href="/assets/css/styles.min.css?h=59da2a6e75e925a25a44d3a48ed40b3f">
+</head>
+
+<body id="page-top">
+    <div id="wrapper">
+        <nav class="navbar align-items-start p-0 sidebar sidebar-dark accordion bg-gradient-primary navbar-dark" style="background: var(--bs-secondary);">
+            <div class="container-fluid d-flex flex-column p-0"><a class="navbar-brand d-flex justify-content-center align-items-center m-0 sidebar-brand" href="#">
+                    <div class="mx-3 sidebar-brand-text"><span>SEDUZAC</span></div>
+                </a>
+                <hr class="my-0 sidebar-divider">
+                <ul class="navbar-nav text-light" id="accordionSidebar">
+                    <li class="nav-item"><a class="nav-link" href="/inicio.html"><i class="fas fa-tachometer-alt"></i><span>Inicio</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="/iniciar_sesion.html"><i class="far fa-user-circle"></i><span>Iniciar Sesión</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="/panel_datos.html"><i class="fas fa-table"></i><span>Panel de Datos</span></a></li>
+                </ul>
+                <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
+            </div>
+        </nav>
+        <div class="d-flex flex-column" id="content-wrapper">
+            <div id="content">
+                <nav class="navbar navbar-expand bg-white shadow d-xl-flex mb-4 topbar">
+                    <div class="container-fluid">
+                        <div></div><a class="navbar-brand" href="#">Sistema de Indicadores Educativos del Estado de Zacatecas</a>
+                        <div></div>
+                    </div>
+                </nav>
+                <div class="container-fluid">
+                    <h3 class="text-dark mb-4">Bases 911</h3>
+                    <div class="card shadow">
+                        <div class="card-header py-3">
+                            <p class="text-primary m-0 fw-bold">Formato para agregar nuevas bases</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6 text-nowrap">
+                                    <div id="dataTable_length" class="dataTables_length" aria-controls="dataTable"><label class="form-label">Mostrar<select class="d-inline-block form-select form-select-sm">
+                                                <option value="10" selected="">10</option>
+                                                <option value="25">25</option>
+                                                <option value="50">50</option>
+                                                <option value="100">100</option>
+                                            </select>&nbsp;</label></div>
+                                </div>
+                                <div class="col-md-6 col-xl-6">
+                                    <div class="text-md-end dataTables_filter" id="dataTable_filter"><label class="form-label"><input type="search" class="form-control form-control-sm" aria-controls="dataTable" placeholder="Buscar"></label></div>
+                                </div>
+                            </div>
+                            <div class="table-responsive mt-2 table" id="dataTable-1" role="grid" aria-describedby="dataTable_info">
+                                <table class="table my-0" id="dataTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Nombre</th>
+                                            <th>Categoría</th>
+                                            <th>Ciclo <br>escolar</th>
+                                            <th>Fecha de <br>actualización</th>
+                                            <th>Agregar<br>archivo</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Preescolar</td>
+                                            <td>Básica</td>
+                                            <td>
+                                                <div class="dropdown"><button class="btn btn-primary dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" type="button">Ciclo Escolar</button>
+                                                    <div class="dropdown-menu"><a class="dropdown-item" href="#">2024</a><a class="dropdown-item" href="#">2023</a></div>
+                                                </div>
+                                            </td>
+                                            <td><input type="date"></td>
+                                            <td><input type="file"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Preescolar <br>Comunitaria Rural</td>
+                                            <td>Básica</td>
+                                            <td>
+                                                <div class="dropdown"><button class="btn btn-primary dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" type="button">Ciclo Escolar </button>
+                                                    <div class="dropdown-menu"><a class="dropdown-item" href="#">2024</a><a class="dropdown-item" href="#">2023</a></div>
+                                                </div>
+                                            </td>
+                                            <td><input type="date"></td>
+                                            <td><input type="file"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Inicial</td>
+                                            <td>Básica</td>
+                                            <td>
+                                                <div class="dropdown"><button class="btn btn-primary dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" type="button">Ciclo Escolar</button>
+                                                    <div class="dropdown-menu"><a class="dropdown-item" href="#">2024</a><a class="dropdown-item" href="#">2023</a></div>
+                                                </div>
+                                            </td>
+                                            <td><input type="date"></td>
+                                            <td><input type="file"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Inicial&nbsp;<br>Comunitaria Rural</td>
+                                            <td>Básica</td>
+                                            <td>
+                                                <div class="dropdown"><button class="btn btn-primary dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" type="button">Ciclo Escolar</button>
+                                                    <div class="dropdown-menu"><a class="dropdown-item" href="#">2024</a><a class="dropdown-item" href="#">2023</a></div>
+                                                </div>
+                                            </td>
+                                            <td><input type="date"></td>
+                                            <td><input type="file"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Primaria</td>
+                                            <td>Básica</td>
+                                            <td>
+                                                <div class="dropdown"><button class="btn btn-primary dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" type="button">Ciclo Escolar</button>
+                                                    <div class="dropdown-menu"><a class="dropdown-item" href="#">2024</a><a class="dropdown-item" href="#">2023</a></div>
+                                                </div>
+                                            </td>
+                                            <td><input type="date"></td>
+                                            <td><input type="file"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Primaria<br>Comunitaria Rural</td>
+                                            <td>Básica</td>
+                                            <td>
+                                                <div class="dropdown"><button class="btn btn-primary dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" type="button">Ciclo Escolar</button>
+                                                    <div class="dropdown-menu"><a class="dropdown-item" href="#">2024</a><a class="dropdown-item" href="#">2023</a></div>
+                                                </div>
+                                            </td>
+                                            <td><input type="date"></td>
+                                            <td><input type="file"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Secundaria</td>
+                                            <td>Básica</td>
+                                            <td>
+                                                <div class="dropdown"><button class="btn btn-primary dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" type="button">Ciclo Escolar</button>
+                                                    <div class="dropdown-menu"><a class="dropdown-item" href="#">2024</a><a class="dropdown-item" href="#">2023</a></div>
+                                                </div>
+                                            </td>
+                                            <td><input type="date"></td>
+                                            <td><input type="file"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Secundaria<br>Comunitaria Rural</td>
+                                            <td>Básica</td>
+                                            <td>
+                                                <div class="dropdown"><button class="btn btn-primary dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" type="button">Ciclo Escolar </button>
+                                                    <div class="dropdown-menu"><a class="dropdown-item" href="#">2024</a><a class="dropdown-item" href="#">2023</a></div>
+                                                </div>
+                                            </td>
+                                            <td><input type="date"></td>
+                                            <td><input type="file"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Bachillerato<br>General</td>
+                                            <td>Media<br>Superior</td>
+                                            <td>
+                                                <div class="dropdown"><button class="btn btn-primary dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" type="button">Ciclo Escolar</button>
+                                                    <div class="dropdown-menu"><a class="dropdown-item" href="#">2024</a><a class="dropdown-item" href="#">2023</a></div>
+                                                </div>
+                                            </td>
+                                            <td><input type="date"></td>
+                                            <td><input type="file"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Bachillerato<br>Carrera</td>
+                                            <td>Media<br>Superior</td>
+                                            <td>
+                                                <div class="dropdown"><button class="btn btn-primary dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" type="button">Ciclo Escolar</button>
+                                                    <div class="dropdown-menu"><a class="dropdown-item" href="#">2024</a><a class="dropdown-item" href="#">2023</a></div>
+                                                </div>
+                                            </td>
+                                            <td><input type="date"></td>
+                                            <td><input type="file"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Bachillerato<br>Plantel</td>
+                                            <td>Media<br>Superior</td>
+                                            <td>
+                                                <div class="dropdown"><button class="btn btn-primary dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" type="button">Ciclo Escolar</button>
+                                                    <div class="dropdown-menu"><a class="dropdown-item" href="#">2024</a><a class="dropdown-item" href="#">2023</a></div>
+                                                </div>
+                                            </td>
+                                            <td><input type="date"></td>
+                                            <td><input type="file"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Superior<br>Carrera</td>
+                                            <td>Superior</td>
+                                            <td>
+                                                <div class="dropdown"><button class="btn btn-primary dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" type="button">Ciclo Escolar</button>
+                                                    <div class="dropdown-menu"><a class="dropdown-item" href="#">2024</a><a class="dropdown-item" href="#">2023</a></div>
+                                                </div>
+                                            </td>
+                                            <td><input type="date"></td>
+                                            <td><input type="file"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Superior Escuela</td>
+                                            <td>Superior</td>
+                                            <td>
+                                                <div class="dropdown"><button class="btn btn-primary dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" type="button">Ciclo Escolar</button>
+                                                    <div class="dropdown-menu"><a class="dropdown-item" href="#">2024</a><a class="dropdown-item" href="#">2023</a></div>
+                                                </div>
+                                            </td>
+                                            <td><input type="date"></td>
+                                            <td><input type="file"></td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td><strong>Nombre</strong></td>
+                                            <td><strong>Categoría</strong></td>
+                                            <td><strong>Ciclo<br>escolar</strong></td>
+                                            <td><strong>Fecha de<br>actualización</strong></td>
+                                            <td><strong>Agregar</strong><br><strong>archivo</strong></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                            <div>
+                                <!-- Start: Default Card -->
+                                <div class="card mb-4">
+                                    <div class="card-header d-flex justify-content-center py-3"><a class="btn btn-primary" role="button" style="background: var(--bs-warning);" href="/panel_datos.html">Agregar todo</a></div>
+                                </div><!-- End: Default Card -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card shadow" style="margin-top: 1%;">
+                        <div class="card-header py-3">
+                            <p class="text-primary m-0 fw-bold">Información de Bases existentes</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6 text-nowrap">
+                                    <div id="dataTable_length-1" class="dataTables_length" aria-controls="dataTable"><label class="form-label">Mostrar<select class="d-inline-block form-select form-select-sm">
+                                                <option value="10" selected="">10</option>
+                                                <option value="25">25</option>
+                                                <option value="50">50</option>
+                                                <option value="100">100</option>
+                                            </select>&nbsp;</label></div>
+                                </div>
+                                <div class="col-md-6 col-xl-6">
+                                    <div class="text-md-end dataTables_filter" id="dataTable_filter-1"><label class="form-label"><input type="search" class="form-control form-control-sm" aria-controls="dataTable" placeholder="Buscar"></label></div>
+                                </div>
+                            </div>
+                            <div class="table-responsive mt-2 table" id="dataTable-2" role="grid" aria-describedby="dataTable_info">
+                                <table class="table my-0" id="dataTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Id</th>
+                                            <th>Nombre</th>
+                                            <th>Categoría</th>
+                                            <th>Ciclo <br>escolar</th>
+                                            <th>Fecha de <br>actualización</th>
+                                            <th>Actualizado<br>por</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>Preescolar</td>
+                                            <td>Básica</td>
+                                            <td>2024</td>
+                                            <td>06/18/2025</td>
+                                            <td>javier@support.com</td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>Preescolar <br>Comunitaria Rural</td>
+                                            <td>Básica</td>
+                                            <td>2024</td>
+                                            <td>06/18/2025</td>
+                                            <td>javier@support.com</td>
+                                        </tr>
+                                        <tr>
+                                            <td>3</td>
+                                            <td>Inicial</td>
+                                            <td>Básica</td>
+                                            <td>2024</td>
+                                            <td>06/18/2025</td>
+                                            <td>javier@support.com</td>
+                                        </tr>
+                                        <tr>
+                                            <td>4</td>
+                                            <td>Inicial&nbsp;<br>Comunitaria Rural</td>
+                                            <td>Básica</td>
+                                            <td>2024</td>
+                                            <td>06/18/2025</td>
+                                            <td>javier@support.com</td>
+                                        </tr>
+                                        <tr>
+                                            <td>5</td>
+                                            <td>Primaria</td>
+                                            <td>Básica</td>
+                                            <td>2024</td>
+                                            <td>06/18/2025</td>
+                                            <td>javier@support.com</td>
+                                        </tr>
+                                        <tr>
+                                            <td>6</td>
+                                            <td>Primaria<br>Comunitaria Rural</td>
+                                            <td>Básica</td>
+                                            <td>2024</td>
+                                            <td>06/18/2025</td>
+                                            <td>javier@support.com</td>
+                                        </tr>
+                                        <tr>
+                                            <td>7</td>
+                                            <td>Secundaria</td>
+                                            <td>Básica</td>
+                                            <td>2024</td>
+                                            <td>06/18/2025</td>
+                                            <td>javier@support.com</td>
+                                        </tr>
+                                        <tr>
+                                            <td>8</td>
+                                            <td>Secundaria<br>Comunitaria Rural</td>
+                                            <td>Básica</td>
+                                            <td>2024</td>
+                                            <td>06/18/2025</td>
+                                            <td>javier@support.com</td>
+                                        </tr>
+                                        <tr>
+                                            <td>9</td>
+                                            <td>Bachillerato<br>General</td>
+                                            <td>Media<br>Superior</td>
+                                            <td>2024</td>
+                                            <td>06/18/2025</td>
+                                            <td>javier@support.com</td>
+                                        </tr>
+                                        <tr>
+                                            <td>10</td>
+                                            <td>Bachillerato<br>Carrera</td>
+                                            <td>Media<br>Superior</td>
+                                            <td>2024</td>
+                                            <td>06/18/2025</td>
+                                            <td>javier@support.com</td>
+                                        </tr>
+                                        <tr>
+                                            <td>11</td>
+                                            <td>Bachillerato<br>Plantel</td>
+                                            <td>Media<br>Superior</td>
+                                            <td>2024</td>
+                                            <td>06/18/2025</td>
+                                            <td>javier@support.com</td>
+                                        </tr>
+                                        <tr>
+                                            <td>12</td>
+                                            <td>Superior<br>Carrera</td>
+                                            <td>Superior</td>
+                                            <td>2024</td>
+                                            <td>06/18/2025</td>
+                                            <td>javier@support.com</td>
+                                        </tr>
+                                        <tr>
+                                            <td>13</td>
+                                            <td>Superior Escuela</td>
+                                            <td>Superior</td>
+                                            <td>2024</td>
+                                            <td>06/18/2025</td>
+                                            <td>javier@support.com</td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td><strong>Id</strong></td>
+                                            <td><strong>Nombre</strong></td>
+                                            <td><strong>Categoría</strong></td>
+                                            <td><strong>Ciclo<br>escolar</strong></td>
+                                            <td><strong>Fecha de<br>actualización</strong></td>
+                                            <td><strong>Actualizado<br>por</strong></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 align-self-center">
+                                    <p id="dataTable_info-1" class="dataTables_info" role="status" aria-live="polite">Mostrando 13 a 13 de 13</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <nav class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
+                                        <ul class="pagination">
+                                            <li class="page-item disabled"><a class="page-link" aria-label="Previous" href="#"><span aria-hidden="true">«</span></a></li>
+                                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                            <li class="page-item"><a class="page-link" aria-label="Next" href="#"><span aria-hidden="true">»</span></a></li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer class="bg-white sticky-footer">
+                <div class="container my-auto">
+                    <div class="text-center my-auto copyright"><span>Copyright © SEDUZAC 2025</span></div>
+                </div>
+            </footer>
+        </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
+    </div>
+    <script src="/assets/bootstrap/js/bootstrap.min.js?h=2cf0875e1daf356bc4e64c053e7a4150"></script>
+    <script src="/assets/js/script.min.js?h=bdf36300aae20ed8ebca7e88738d5267"></script>
+</body>
+
+</html>

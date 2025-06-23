@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html data-bs-theme="light" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Dashboard - Brand</title>
+    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css?h=b77f9cffb8754f588d38677bb31f69bb">
+    <link rel="stylesheet" href="/assets/fonts/fontawesome-all.min.css?h=d10b6c02b76e3f05c44d290530be1366">
+    <link rel="stylesheet" href="/assets/css/styles.min.css?h=59da2a6e75e925a25a44d3a48ed40b3f">
+</head>
+
+<body id="page-top">
+    <div id="wrapper">
+        <nav class="navbar align-items-start p-0 sidebar sidebar-dark accordion bg-gradient-primary navbar-dark" style="background: var(--bs-secondary);">
+            <div class="container-fluid d-flex flex-column p-0"><a class="navbar-brand d-flex justify-content-center align-items-center m-0 sidebar-brand" href="#">
+                    <div class="mx-3 sidebar-brand-text"><span>SEDUZAC</span></div>
+                </a>
+                <hr class="my-0 sidebar-divider">
+                <ul class="navbar-nav text-light" id="accordionSidebar">
+                    <li class="nav-item"><a class="nav-link" href="/inicio.html"><i class="fas fa-tachometer-alt"></i><span>Inicio</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="/iniciar_sesion.html"><i class="far fa-user-circle"></i><span>Iniciar Sesión</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="/panel_datos.html"><i class="fas fa-table"></i><span>Panel de Datos</span></a></li>
+                </ul>
+                <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
+            </div>
+        </nav>
+        <div class="d-flex flex-column" id="content-wrapper">
+            <div id="content">
+                <nav class="navbar navbar-expand bg-white shadow d-xl-flex mb-4 topbar">
+                    <div class="container-fluid">
+                        <div></div><a class="navbar-brand" href="#">Sistema de Indicadores Educativos del Estado de Zacatecas</a>
+                        <div></div>
+                    </div>
+                </nav>
+                <div class="container-fluid">
+                    <h3 class="text-dark mb-4">Datos CONAPO</h3>
+                    <div class="card shadow" style="margin-top: 1%;">
+                        <div class="card-header py-3">
+                            <p class="text-primary m-0 fw-bold">Formato para actualizar datos CONAPO</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive mt-2 table" id="dataTable-2" role="grid" aria-describedby="dataTable_info">
+                                <table class="table my-0" id="dataTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Id</th>
+                                            <th>Nombre</th>
+                                            <th>Categoría</th>
+                                            <th>Última fecha <br>de actualización</th>
+                                            <th>Actualizado<br>por</th>
+                                            <th>Nueva fecha<br>de actualización</th>
+                                            <th>Nuevo archivo</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>Proyecciones<br>Poblacionales</td>
+                                            <td>Básica</td>
+                                            <td>06/18/2025</td>
+                                            <td>javier@support.com</td>
+                                            <td><input type="date"></td>
+                                            <td><input type="file"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>Índice de <br>marginación <br>por localidad</td>
+                                            <td>Básica</td>
+                                            <td>06/18/2025</td>
+                                            <td>javier@support.com</td>
+                                            <td><input type="date"></td>
+                                            <td><input type="file"></td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td><strong>Id</strong></td>
+                                            <td><strong>Nombre</strong></td>
+                                            <td><strong>Categoría</strong></td>
+                                            <td><strong>Última fecha<br>de actualización</strong></td>
+                                            <td><strong>Actualizado<br>por</strong></td>
+                                            <td><strong>Nueva fecha</strong><br><strong>de actualización</strong></td>
+                                            <td><strong>Nuevo archivo</strong></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                            <div>
+                                <!-- Start: Default Card -->
+                                <div class="card mb-4">
+                                    <div class="card-header d-flex justify-content-center py-3"><a class="btn btn-primary" role="button" style="background: var(--bs-warning);" href="/panel_datos.html">Actualizar todo</a></div>
+                                </div><!-- End: Default Card -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer class="bg-white sticky-footer">
+                <div class="container my-auto">
+                    <div class="text-center my-auto copyright"><span>Copyright © SEDUZAC 2025</span></div>
+                </div>
+            </footer>
+        </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
+    </div>
+    <script src="/assets/bootstrap/js/bootstrap.min.js?h=2cf0875e1daf356bc4e64c053e7a4150"></script>
+    <script src="/assets/js/script.min.js?h=bdf36300aae20ed8ebca7e88738d5267"></script>
+</body>
+
+</html>
