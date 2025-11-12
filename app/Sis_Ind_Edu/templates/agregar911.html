@@ -1,174 +1,167 @@
 {% extends "blank.html" %}
 {% block funcionalidad %}
-                <div class="container-fluid">
-                    <h3 class="text-dark mb-4">Bases 911</h3>
-                    <div class="card shadow">
-                        <div class="card-header py-3">
-                            <p class="text-primary m-0 fw-bold">Formato para agregar nuevas bases</p>
+<div class="container-fluid">
+    <h3 class="text-dark mb-4">Bases 911</h3>
+    <div class="card shadow">
+        <div class="card-header py-3">
+            <p class="text-primary m-0 fw-bold">Formato para agregar nuevas bases</p>
+        </div>
+        <div class="card-body">
+            <!----------------------------------Comienza la tabla de formulario---------------------------------->
+            <form method="post" action="{% url 'subir_archivos_911' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="accordion mb-3" id="tablaAccordion">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingTabla">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTabla" aria-expanded="false" aria-controls="collapseTabla">
+                                Formulario de niveles educativos
+                            </button>
+                        </h2>
+                        <div id="collapseTabla" class="accordion-collapse collapse" aria-labelledby="headingTabla" data-bs-parent="#tablaAccordion">
+                            <div class="accordion-body">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Nombre</th>
+                                            <th>Ciclo Escolar</th>
+                                            <th>Fecha</th>
+                                            <th>Archivo</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for nivel in niveles %}
+                                        <tr>
+                                            <td>
+                                                {{ nivel.nombre }}
+                                                <input type="hidden" name="nombre_{{ forloop.counter }}" value="{{ nivel.nombre }}">
+                                            </td>
+                                            <td>
+                                                <div class="dropdown">
+                                                    <button id="dropdownButton{{ forloop.counter }}" class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <span class="textoDropdown">Ciclo Escolar</span>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        {% for ciclo_escolar in ciclos_escolares %}
+                                                        <button type="button" class="dropdown-item"
+                                                            data-button-id="dropdownButton{{ forloop.parentloop.counter }}"
+                                                            data-input-id="ciclo_{{ forloop.parentloop.counter }}"
+                                                            data-texto="{{ ciclo_escolar.inicio }} - {{ ciclo_escolar.fin }}"
+                                                            data-valor-real="{{ ciclo_escolar.inicio }}">
+                                                            {{ ciclo_escolar.inicio }}
+                                                        </button>
+                                                        {% endfor %}
+                                                    </div>
+                                                    <input type="hidden" name="ciclo_{{ forloop.counter }}" id="ciclo_{{ forloop.counter }}">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <input type="date" name="fecha_{{ forloop.counter }}" class="form-control">
+                                            </td>
+                                            <td>
+                                                <input type="file" name="archivo_{{ forloop.counter }}" class="form-control">
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td><strong>Nombre</strong></td>
+                                            <td><strong>Ciclo escolar</strong></td>
+                                            <td><strong>Fecha de actualización</strong></td>
+                                            <td><strong>Archivo</strong></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
                         </div>
-                        <div class="card-body">
-<!----------------------------------Comienza la tabla de formulario---------------------------------->
-<form method="post" action="{% url 'subir_archivos_911' %}" enctype="multipart/form-data">
-    {% csrf_token %}
-    <div class="accordion mb-3" id="tablaAccordion">
-        <div class="accordion-item">
-            <h2 class="accordion-header" id="headingTabla">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTabla" aria-expanded="false" aria-controls="collapseTabla">
-                    Formulario de niveles educativos
-                </button>
-            </h2>
-            <div id="collapseTabla" class="accordion-collapse collapse" aria-labelledby="headingTabla" data-bs-parent="#tablaAccordion">
-                <div class="accordion-body">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Nombre</th>
-                                <th>Ciclo Escolar</th>
-                                <th>Fecha</th>
-                                <th>Archivo</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for nivel in niveles %}
-                            <tr>
-                                <td>
-                                    {{ nivel.nombre }}
-                                    <input type="hidden" name="nombre_{{ forloop.counter }}" value="{{ nivel.nombre }}">
-                                </td>
-                                <td>
-                                    <div class="dropdown">
-<button id="dropdownButton{{ forloop.counter }}" class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-    <span class="textoDropdown">Ciclo Escolar</span>
-</button>
-                                <div class="dropdown-menu">
-                                    {% for ciclo_escolar in ciclos_escolares %}
-                                    <button type="button" class="dropdown-item"
-                                        data-button-id="dropdownButton{{ forloop.parentloop.counter }}"
-                                        data-input-id="ciclo_{{ forloop.parentloop.counter }}"
-                                        data-texto="{{ ciclo_escolar.inicio }} - {{ ciclo_escolar.fin }}"
-                                        data-valor-real="{{ ciclo_escolar.inicio }}">
-                                        {{ ciclo_escolar.inicio }}
-                                    </button>
-                                    {% endfor %}
-                                </div>
-                                <input type="hidden" name="ciclo_{{ forloop.counter }}" id="ciclo_{{ forloop.counter }}">
-                                </td>
-                                <td>
-                                    <input type="date" name="fecha_{{ forloop.counter }}" class="form-control">
-                                </td>
-                                <td>
-                                    <input type="file" name="archivo_{{ forloop.counter }}" class="form-control">
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <td><strong>Nombre</strong></td>
-                                <td><strong>Ciclo escolar</strong></td>
-                                <td><strong>Fecha de actualización</strong></td>
-                                <td><strong>Archivo</strong></td>
-                            </tr>
-                        </tfoot>
-                    </table>
+                    </div>
                 </div>
+                <input type="hidden" name="total_filas" value="{{ niveles|length }}">
+                <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-center py-3">
+                        <button type="submit" class="btn btn-primary" style="background: var(--bs-warning);">
+                            Agregar todo
+                        </button>
+                    </div>
+                </div>
+            </form>
+            <!----------------------------------Termina la tabla de formulario---------------------------------->
+
+        </div>
+    </div>
+
+    <!-- Inicia la tabla de datos ya existentes -->
+    <div class="card shadow" style="margin-top: 1%;">
+        <div class="card-header py-3">
+            <p class="text-primary m-0 fw-bold">Información de Bases existentes</p>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive mt-2 table" id="dataTable-2">
+                <table class="table my-0" id="dataTable">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Ciclo escolar</th>
+                            <th>Fecha de actualización</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for base_inicial in bases_inicial %}
+                        <tr>
+                            <td>{{ base_inicial.nombre }}</td>
+                            <td>{{ base_inicial.ciclo_escolar_inicio }}</td>
+                            <td>{{ base_inicial.fecha_actualizacion }}</td>
+                        </tr>
+                        {% endfor %}
+                        {% for base_preescolar in bases_preescolar %}
+                        <tr>
+                            <td>{{ base_preescolar.nombre }}</td>
+                            <td>{{ base_preescolar.ciclo_escolar_inicio }}</td>
+                            <td>{{ base_preescolar.fecha_actualizacion }}</td>
+                        </tr>
+                        {% endfor %}
+                        {% for base_primaria in bases_primaria %}
+                        <tr>
+                            <td>{{ base_primaria.nombre }}</td>
+                            <td>{{ base_primaria.ciclo_escolar_inicio }}</td>
+                            <td>{{ base_primaria.fecha_actualizacion }}</td>
+                        </tr>
+                        {% endfor %}
+                        {% for base_secundaria in bases_secundaria %}
+                        <tr>
+                            <td>{{ base_secundaria.nombre }}</td>
+                            <td>{{ base_secundaria.ciclo_escolar_inicio }}</td>
+                            <td>{{ base_secundaria.fecha_actualizacion }}</td>
+                        </tr>
+                        {% endfor %}
+                        {% for base_media_superior in bases_media_superior %}
+                        <tr>
+                            <td>{{ base_media_superior.nombre }}</td>
+                            <td>{{ base_media_superior.ciclo_escolar_inicio }}</td>
+                            <td>{{ base_media_superior.fecha_actualizacion }}</td>
+                        </tr>
+                        {% endfor %}
+                        {% for base_superior in bases_superior %}
+                        <tr>
+                            <td>{{ base_superior.nombre }}</td>
+                            <td>{{ base_superior.ciclo_escolar_inicio }}</td>
+                            <td>{{ base_superior.fecha_actualizacion }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td><strong>Nombre</strong></td>
+                            <td><strong>Ciclo escolar</strong></td>
+                            <td><strong>Fecha de actualización</strong></td>
+                        </tr>
+                    </tfoot>
+                </table>
             </div>
         </div>
     </div>
-    <input type="hidden" name="total_filas" value="{{ niveles|length }}">
-    <div class="card mb-4">
-        <div class="card-header d-flex justify-content-center py-3">
-            <button type="submit" class="btn btn-primary" style="background: var(--bs-warning);">
-                Agregar todo
-            </button>
-        </div>
-    </div>
-</form>
-<!----------------------------------Termina la tabla de formulario---------------------------------->
-
-                            <div>
-                            </div>
-                        </div>
-                    </div><!-- Inicia la tabla de datos ya existentes -->
-<div class="card shadow" style="margin-top: 1%;">
-    <div class="card-header py-3">
-        <p class="text-primary m-0 fw-bold">Información de Bases existentes</p>
-    </div>
-    <div class="card-body">
-        <div class="table-responsive mt-2 table" id="dataTable-2">
-            <table class="table my-0" id="dataTable">
-                <thead>
-                    <tr>
-                        <th>Nombre</th>
-                        <th>Ciclo escolar</th>
-                        <th>Fecha de actualización</th>
-                        <th>Actualizado por</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {% for base_inicial in bases_inicial %}
-                    <tr>
-                        <td>{{ base_inicial.nombre }}</td>
-                        <td>{{ base_inicial.ciclo_escolar_inicio }}</td>
-                        <td>{{ base_inicial.fecha_actualizacion }}</td>
-                        <td>{{ base_inicial.actualizado_por_nombre }}</td>
-                    </tr>
-                {% endfor %}
-                {% for base_preescolar in bases_preescolar %}
-                    <tr>
-                        <td>{{ base_preescolar.nombre }}</td>
-                        <td>{{ base_preescolar.ciclo_escolar_inicio }}</td>
-                        <td>{{ base_preescolar.fecha_actualizacion }}</td>
-                        <td>{{ base_preescolar.actualizado_por_nombre }}</td>
-                    </tr>
-                {% endfor %}
-                {% for base_primaria in bases_primaria %}
-                    <tr>
-                        <td>{{ base_primaria.nombre }}</td>
-                        <td>{{ base_primaria.ciclo_escolar_inicio }}</td>
-                        <td>{{ base_primaria.fecha_actualizacion }}</td>
-                        <td>{{ base_primaria.actualizado_por_nombre }}</td>
-                    </tr>
-                {% endfor %}
-                {% for base_secundaria in bases_secundaria %}
-                    <tr>
-                        <td>{{ base_secundaria.nombre }}</td>
-                        <td>{{ base_secundaria.ciclo_escolar_inicio }}</td>
-                        <td>{{ base_secundaria.fecha_actualizacion }}</td>
-                        <td>{{ base_secundaria.actualizado_por_nombre }}</td>
-                    </tr>
-                {% endfor %}
-                {% for base_media_superior in bases_media_superior %}
-                    <tr>
-                        <td>{{ base_media_superior.nombre }}</td>
-                        <td>{{ base_media_superior.ciclo_escolar_inicio }}</td>
-                        <td>{{ base_media_superior.fecha_actualizacion }}</td>
-                        <td>{{ base_media_superior.actualizado_por_nombre }}</td>
-                    </tr>
-                {% endfor %}
-                {% for base_superior in bases_superior %}
-                    <tr>
-                        <td>{{ base_superior.nombre }}</td>
-                        <td>{{ base_superior.ciclo_escolar_inicio }}</td>
-                        <td>{{ base_superior.fecha_actualizacion }}</td>
-                        <td>{{ base_superior.actualizado_por_nombre }}</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td><strong>Nombre</strong></td>
-                        <td><strong>Ciclo escolar</strong></td>
-                        <td><strong>Fecha de actualización</strong></td>
-                        <td><strong>Actualizado por</strong></td>
-                    </tr>
-                </tfoot>
-            </table>
-        </div>
-    </div>
+    <!-- Termina la tabla de datos ya existentes -->
 </div>
-<!-- Termina la tabla de datos ya existentes -->
-                </div>
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {

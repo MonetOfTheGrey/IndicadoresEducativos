@@ -10,64 +10,88 @@
     <link rel="stylesheet" href="{% static 'css/Nunito.css' %}">
     <link rel="stylesheet" href="{% static 'fonts/fontawesome-all.min.css' %}">
     
-    <!-- DataTables CSS -->
+    <!-- DataTables -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-    <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-    <!-- DataTables JS -->
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-
 </head>
 
 <body id="page-top">
     <div id="wrapper">
+
+        <!-- 🔹 Sidebar (bloque reemplazable)
+        {% block sidebar %}
         <nav class="navbar align-items-start p-0 sidebar sidebar-dark accordion bg-gradient-primary navbar-dark" style="background: var(--bs-secondary);">
-            <div class="container-fluid d-flex flex-column p-0"><a class="navbar-brand d-flex justify-content-center align-items-center m-0 sidebar-brand" href="#">
+            <div class="container-fluid d-flex flex-column p-0">
+                <a class="navbar-brand d-flex justify-content-center align-items-center m-0 sidebar-brand" href="#">
                     <div class="mx-3 sidebar-brand-text"><span>SEDUZAC</span></div>
                 </a>
                 <hr class="my-0 sidebar-divider">
                 <ul class="navbar-nav text-light" id="accordionSidebar">
-                    <li class="nav-item"><a class="nav-link" href="{% url 'blank' %}"><i class="fas fa-tachometer-alt"></i><span>Inicio</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'iniciar_sesion' %}"><i class="far fa-user-circle"></i><span>Iniciar Sesión</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'panel_datos' %}"><i class="fas fa-table"></i><span>Panel de Datos</span></a></li>
+                     Sidebar vacío por defecto 
                 </ul>
-                <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
             </div>
         </nav>
+        {% endblock %} -->
+
+        <!-- Contenido principal -->
         <div class="d-flex flex-column" id="content-wrapper">
             <div id="content">
+
+                <!-- 🔹 Navbar superior -->
                 <nav class="navbar navbar-expand bg-white shadow d-xl-flex mb-4 topbar">
                     <div class="container-fluid">
-                        <div></div><a class="navbar-brand" href="#">Sistema de Indicadores Educativos del Estado de Zacatecas</a>
-                        <div></div>
+                        <a class="navbar-brand d-flex align-items-center gap-3" href="#">
+                            <span class="fw-bold">Sistema de Indicadores Educativos del Estado de Zacatecas</span>
+
+                            <!-- Botones globales -->
+                            <a class="btn btn-outline-primary btn-sm" href="{% url 'blank' %}">
+                                <i class="fas fa-tachometer-alt"></i> Inicio
+                            </a>
+                            <a class="btn btn-outline-secondary btn-sm" href="{% url 'iniciar_sesion' %}">
+                                <i class="far fa-user-circle"></i> Iniciar Sesión
+                            </a>
+                            <a class="btn btn-outline-success btn-sm" href="{% url 'panel_datos' %}">
+                                <i class="fas fa-table"></i> Panel de Datos
+                            </a>
+                        </a>
                     </div>
                 </nav>
-            {% block funcionalidad %}
-            
-            {% endblock %}
+
+                <!-- 🔹 Contenido funcional de cada página -->
+                {% block funcionalidad %}{% endblock %}
             </div>
+
+            <!-- Footer -->
             <footer class="bg-white sticky-footer">
                 <div class="container my-auto">
-                    <div class="text-center my-auto copyright"><span>Copyright © SEDUZAC 2025</span></div>
+                    <div class="text-center my-auto copyright">
+                        <span>Copyright © SEDUZAC 2025</span>
+                    </div>
                 </div>
             </footer>
-        </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
+        </div>
+
+        <!-- Scroll-to-top -->
+        <a class="border rounded d-inline scroll-to-top" href="#page-top">
+            <i class="fas fa-angle-up"></i>
+        </a>
     </div>
+
+    <!-- Scripts -->
     <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
     <script src="{% static 'js/bs-init.js' %}"></script>
     <script src="{% static 'js/theme.js' %}"></script>
-<script>
-    $(document).ready(function () {
-        $('#dataTable').DataTable({
-            language: {
-                url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
-            },
-            pageLength: 10,
-            lengthMenu: [10, 25, 50, 100],
-            ordering: true
-        });
-    });
-</script>
-</body>
 
+    <script>
+        $(document).ready(function () {
+            $('#dataTable').DataTable({
+                language: { url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json' },
+                pageLength: 10,
+                lengthMenu: [10, 25, 50, 100],
+                ordering: true
+            });
+        });
+    </script>
+</body>
 </html>

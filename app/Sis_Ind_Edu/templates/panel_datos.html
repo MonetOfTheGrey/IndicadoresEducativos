@@ -1,91 +1,287 @@
 {% extends "blank.html" %}
+
 {% block funcionalidad %}
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h5 class="d-xl-flex justify-content-xl-center mb-0">Bases de datos 911</h5>
-                                </div>
-                                <div class="card-body">
-                                    <!-- Start: Collapsible Card -->
-                                    <div class="shadow card"><a class="btn btn-link text-start d-flex justify-content-center card-header fw-bold" data-bs-toggle="collapse" aria-expanded="false" aria-controls="collapse-4" href="#collapse-4" role="button">Información</a>
-                                        <div class="collapse" id="collapse-4">
-                                            <div class="card-body">
-                                                <p class="m-0">El Formato 911, también conocido como Estadística 911, es un cuestionario elaborado por la Secretaría de Educación Pública de México para recolectar información estadística detallada sobre los centros educativos.</p>
-                                            </div>
-                                        </div>
-                                    </div><!-- End: Collapsible Card -->
-                                    <p class="card-text"></p>
-                                    <div class="d-xl-flex justify-content-xl-center">
-                                        <!-- Start: Split Button Success --><a class="btn btn-success btn-icon-split" role="button" href="{% url 'agregar911' %}"><span class="text-white-50 icon"><i class="fas fa-check"></i></span><span class="text-white text">Agregar bases 911</span></a><!-- End: Split Button Success -->
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h5 class="d-xl-flex justify-content-xl-center mb-0">Proyecciones Poblacionales CONAPO</h5>
-                                </div>
-                                <div class="card-body">
-                                    <!-- Start: Collapsible Card -->
-                                    <div class="shadow card"><a class="btn btn-link text-start d-flex justify-content-center card-header fw-bold" data-bs-toggle="collapse" aria-expanded="false" aria-controls="collapse-1" href="#collapse-1" role="button">Información</a>
-                                        <div class="collapse" id="collapse-1">
-                                            <div class="card-body">
-                                                <p class="m-0">Los datos de Proyecciones Poblacionales de CONAPO son fundamentales para el cálculo de indicadores educativos que requieren de datos de población total de una entidad federativa en particular.</p>
-                                            </div>
-                                        </div>
-                                    </div><!-- End: Collapsible Card -->
-                                    <p class="card-text"></p>
-                                    <div class="d-xl-flex justify-content-xl-center">
-                                        <!-- Start: Split Button Info --><a class="btn btn-info btn-icon-split" role="button" href="/agregar_conapo.html"><span class="text-white-50 icon"><i class="fas fa-info-circle"></i></span><span class="text-white text">Actualizar Predicciones Poblacionales</span></a><!-- End: Split Button Info -->
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div><!-- End: 1 Row 2 Columns -->
-                <!-- Start: 1 Row 2 Columns -->
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-6 offset-xl-0">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h5 class="d-xl-flex justify-content-xl-center mb-0">Índice de Marginación por Localidad CONAPO</h5>
-                                </div>
-                                <div class="card-body">
-                                    <!-- Start: Collapsible Card -->
-                                    <div class="shadow card"><a class="btn btn-link text-start d-flex justify-content-center card-header fw-bold" data-bs-toggle="collapse" aria-expanded="false" aria-controls="collapse-2" href="#collapse-2" role="button">Información</a>
-                                        <div class="collapse" id="collapse-2">
-                                            <div class="card-body">
-                                                <p class="m-0">Los datos de Proyecciones Poblacionales de CONAPO son fundamentales para el cálculo de indicadores educativos que requieren de datos de población total de una entidad federativa en particular.</p>
-                                            </div>
-                                        </div>
-                                    </div><!-- End: Collapsible Card -->
-                                    <p class="card-text"></p>
-                                    <div class="d-xl-flex justify-content-xl-center">
-                                        <!-- Start: Split Button Info --><a class="btn btn-info btn-icon-split" role="button" href="/agregar_conapo.html"><span class="text-white-50 icon"><i class="fas fa-info-circle"></i></span><span class="text-white text">Actualizar Índice de Marginación por Localidad</span></a><!-- End: Split Button Info -->
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6 offset-xl-0">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h5 class="d-xl-flex justify-content-xl-center mb-0">Calcular Indicadores Educativos</h5>
-                                </div>
-                                <div class="card-body">
-                                    <p class="card-text">Una vez hayas agregado (o actualizado) todos los datos requeridos para el cálculo de cada Indicador Educativo podrás realizar su cálculo en esta sección.</p>
-                                    <div class="d-xl-flex justify-content-xl-center">
-                                        <!-- Start: Split Button Primary --><a class="btn btn-primary btn-icon-split" role="button" href="/inicio.html"><span class="text-white-50 icon"><i class="fas fa-flag"></i></span><span class="text-white text">Calcular Tasa Bruta de Escolarización</span></a><!-- End: Split Button Primary -->
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div><!-- End: 1 Row 2 Columns -->
-                <div class="d-xl-flex justify-content-xl-center">
-                    <!-- Start: Split Button Danger --><a class="btn btn-danger btn-icon-split" role="button" href="/inicio.html"><span class="text-white-50 icon"><i class="fas fa-window-close"></i></span><span class="text-white text">Cerrar Sesión</span></a><!-- End: Split Button Danger -->
+<div class="container">
+
+    <!-- ============================================= -->
+    <!-- FILA 1: Bases de datos 911 y Proyecciones CONAPO -->
+    <!-- ============================================= -->
+    <div class="row">
+        <!-- Columna 1: Bases de datos 911 -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="d-xl-flex justify-content-xl-center mb-0">Bases de datos 911</h5>
                 </div>
+                <div class="card-body">
+
+                    <!-- Tarjeta colapsable: Información -->
+                    <div class="shadow card">
+                        <a class="btn btn-link text-start d-flex justify-content-center card-header fw-bold"
+                           data-bs-toggle="collapse" href="#collapse-911" role="button"
+                           aria-expanded="false" aria-controls="collapse-911">
+                            Información
+                        </a>
+                        <div class="collapse" id="collapse-911">
+                            <div class="card-body">
+                                <p class="m-0">
+                                    El Formato 911, también conocido como Estadística 911, es un cuestionario elaborado por la Secretaría de Educación Pública de México para recolectar información estadística detallada sobre los centros educativos.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Botón: Agregar bases 911 -->
+                    <div class="d-xl-flex justify-content-xl-center mt-3">
+                        <a class="btn btn-success btn-icon-split" href="{% url 'agregar911' %}">
+                            <span class="text-white-50 icon"><i class="fas fa-check"></i></span>
+                            <span class="text-white text">Agregar bases 911</span>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Columna 2: Proyecciones Poblacionales CONAPO -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="d-xl-flex justify-content-xl-center mb-0">Proyecciones Poblacionales CONAPO</h5>
+                </div>
+                <div class="card-body">
+
+                    <!-- Tarjeta colapsable: Información -->
+                    <div class="shadow card">
+                        <a class="btn btn-link text-start d-flex justify-content-center card-header fw-bold"
+                           data-bs-toggle="collapse" href="#collapse-conapo" role="button"
+                           aria-expanded="false" aria-controls="collapse-conapo">
+                            Información
+                        </a>
+                        <div class="collapse" id="collapse-conapo">
+                            <div class="card-body">
+                                <p class="m-0">
+                                    Los datos de Proyecciones Poblacionales de CONAPO son fundamentales para el cálculo de indicadores educativos que requieren datos de población total de una entidad federativa. Se utiliza la “Población a mitad de año, 1950-2070”.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Botón: Actualizar proyecciones -->
+                    <div class="d-xl-flex justify-content-xl-center mt-3">
+                        <a class="btn btn-info btn-icon-split" href="{% url 'agregar_conapo' %}">
+                            <span class="text-white-50 icon"><i class="fas fa-info-circle"></i></span>
+                            <span class="text-white text">Actualizar Predicciones Poblacionales</span>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Fin de Fila 1 -->
+
+
+    <!-- ============================================= -->
+    <!-- FILA 2: Índice de Marginación y Cálculo de Indicadores -->
+    <!-- ============================================= -->
+    <div class="row mt-4">
+
+        <!-- Columna 1: Índice de Marginación -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="d-xl-flex justify-content-xl-center mb-0">Índice de Marginación por Localidad CONAPO</h5>
+                </div>
+                <div class="card-body">
+
+                    <!-- Tarjeta colapsable: Información -->
+                    <div class="shadow card">
+                        <a class="btn btn-link text-start d-flex justify-content-center card-header fw-bold"
+                           data-bs-toggle="collapse" href="#collapse-marginacion" role="button"
+                           aria-expanded="false" aria-controls="collapse-marginacion">
+                            Información
+                        </a>
+                        <div class="collapse" id="collapse-marginacion">
+                            <div class="card-body">
+                                <p class="m-0">
+                                    Los índices de marginación por localidad de CONAPO 2020 son fundamentales para el análisis de desigualdades en el sistema educativo mexicano.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Botón: Actualizar índice -->
+                    <div class="d-xl-flex justify-content-xl-center mt-3">
+                        <a class="btn btn-info btn-icon-split" href="{% url 'agregar_conapo' %}">
+                            <span class="text-white-50 icon"><i class="fas fa-info-circle"></i></span>
+                            <span class="text-white text">Actualizar Índice de Marginación por Localidad</span>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Columna 2: Calcular Indicadores Educativos -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="d-xl-flex justify-content-xl-center mb-0">Calcular Indicadores Educativos</h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">
+                        Una vez hayas agregado (o actualizado) todos los datos requeridos para el cálculo de los indicadores educativos, podrás realizar su cálculo en esta sección.
+                    </p>
+
+                    <div class="d-xl-flex justify-content-xl-center mt-3">
+                        <form action="{% url 'actualizar_cobertura_escolar' %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-info btn-icon-split">
+                                <span class="text-white-50 icon"><i class="fas fa-flag"></i></span>
+                                <span class="text-white text">Calcular Tasa Bruta de Escolarización</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- Fin de Fila 2 -->
+
+
+<!-- ============================================= -->
+<!-- FILA 3: Actualizar y Consultar Definiciones -->
+<!-- ============================================= -->
+<div class="row mt-4">
+
+    <!-- Columna 1: Actualizar Definiciones -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="d-xl-flex justify-content-xl-center mb-0">Actualizar Definiciones</h5>
+            </div>
+            <div class="card-body">
+
+                <!-- Tarjeta colapsable: Información -->
+                <div class="shadow card">
+                    <a class="btn btn-link text-start d-flex justify-content-center card-header fw-bold"
+                       data-bs-toggle="collapse" href="#collapse-definiciones" role="button"
+                       aria-expanded="false" aria-controls="collapse-definiciones">
+                        Información
+                    </a>
+                    <div class="collapse" id="collapse-definiciones">
+                        <div class="card-body">
+                            <p class="m-0">
+                                Utiliza esta sección para agregar o actualizar una definición de Indicador Educativo.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botón: Actualizar definiciones -->
+                <div class="d-xl-flex justify-content-xl-center mt-3">
+                    <a class="btn btn-success btn-icon-split" href="{% url 'agregar_definicion' %}">
+                        <span class="text-white-50 icon"><i class="fas fa-check"></i></span>
+                        <span class="text-white text">Actualizar definiciones de indicadores</span>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Columna 2: Consultar Definiciones (ejemplo adicional) -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="d-xl-flex justify-content-xl-center mb-0">Actualizar Interpretaciones</h5>
+            </div>
+            <div class="card-body">
+
+                <!-- Tarjeta colapsable: Información -->
+                <div class="shadow card">
+                    <a class="btn btn-link text-start d-flex justify-content-center card-header fw-bold"
+                       data-bs-toggle="collapse" href="#collapse-interpretaciones" role="button"
+                       aria-expanded="false" aria-controls="collapse-interpretaciones">
+                        Información
+                    </a>
+                    <div class="collapse" id="collapse-consultar-interpretaciones">
+                        <div class="card-body">
+                            <p class="m-0">
+                                Actualiza las interpretaciones de cada indicador educativo
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botón: Actualizar interpretaciones -->
+                <div class="d-xl-flex justify-content-xl-center mt-3">
+                    <a class="btn btn-primary btn-icon-split" href="{% url 'agregar_interpretacion' %}">
+                        <span class="text-white-50 icon"><i class="fas fa-book"></i></span>
+                        <span class="text-white text">Actualizar interpretaciones de indicadores</span>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- Fin de Fila 3 -->
+
+<!-- ============================================= -->
+<!-- FILA 4: Actualizar y Consultar Algoritmos -->
+<!-- ============================================= -->
+<div class="row mt-4">
+    <!-- Columna 1: Actualizar Algoritmos -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="d-xl-flex justify-content-xl-center mb-0">Actualizar Algoritmos</h5>
+            </div>
+            <div class="card-body">
+
+                <!-- Tarjeta colapsable: Información -->
+                <div class="shadow card">
+                    <a class="btn btn-link text-start d-flex justify-content-center card-header fw-bold"
+                       data-bs-toggle="collapse" href="#collapse-algoritmos" role="button"
+                       aria-expanded="false" aria-controls="collapse-algoritmos">
+                        Información
+                    </a>
+                    <div class="collapse" id="collapse-algoritmos">
+                        <div class="card-body">
+                            <p class="m-0">
+                                Utiliza esta sección para agregar o actualizar el algoritmo de cálculo para un Indicador Educativo.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botón: Actualizar algoritmos -->
+                <div class="d-xl-flex justify-content-xl-center mt-3">
+                    <a class="btn btn-success btn-icon-split" href="{% url 'agregar_algoritmo' %}">
+                        <span class="text-white-50 icon"><i class="fas fa-check"></i></span>
+                        <span class="text-white text">Actualizar algoritmos de indicadores</span>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Fin de Fila 4 -->
+
+</div>
+
+<!-- ============================================= -->
+<!-- BOTÓN: Cerrar sesión -->
+<!-- ============================================= -->
+<div class="d-xl-flex justify-content-xl-center mt-4 mb-4">
+    <a class="btn btn-danger btn-icon-split" href="/inicio.html">
+        <span class="text-white-50 icon"><i class="fas fa-window-close"></i></span>
+        <span class="text-white text">Cerrar Sesión</span>
+    </a>
+</div>
 {% endblock %}
