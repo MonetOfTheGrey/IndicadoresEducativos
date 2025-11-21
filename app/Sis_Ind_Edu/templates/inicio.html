@@ -20,7 +20,7 @@
                     <div class="col-md-6">
                         <label class="form-label fw-bold">Indicador educativo</label>
                         <select class="form-select" name="indicador">
-                            <option value="">-- Selecciona un indicador --</option>
+                            <option value="">Todos los indicadores</option>
                             {% for clave, nombre in indicadores.items %}
                                 <option value="{{ clave }}" {% if clave == indicador_seleccionado %}selected{% endif %}>
                                     {{ nombre }}
@@ -33,7 +33,7 @@
                     <div class="col-md-6">
                         <label class="form-label fw-bold">Ciclo escolar</label>
                         <select class="form-select" name="ciclo">
-                            <option value="">-- Selecciona un ciclo --</option>
+                            <option value="">Todos los ciclos</option>
                             {% for ciclo in ciclos_escolares %}
                                 <option value="{{ ciclo.inicio }}" {% if ciclo.inicio|stringformat:"s" == ciclo_seleccionado|stringformat:"s" %}selected{% endif %}>
                                     {{ ciclo.inicio }} - {{ ciclo.fin }}
@@ -128,9 +128,9 @@
 <!-- SECCIÓN DE SERIE HISTÓRICA -->
 <!-- ============================================================= -->
 {% if graficos_multiples_existentes %}
-    {% for grafico in graficos_multiples_existentes %}
         <div class="container-fluid my-5">
             <div class="card shadow border-left-success mb-4">
+                {% for grafico in graficos_multiples_existentes %}
                 <div class="card-header bg-light">
                     <h5 class="fw-bold text-success mb-0">
                         Serie histórica: {{ nombre_indicador }}
@@ -155,9 +155,9 @@
                              alt="Serie histórica {{ nombre_indicador }}">
                     </div>
                 </div>
+                {% endfor %}
             </div>
         </div>
-    {% endfor %}
 {% endif %}
 
 
@@ -221,33 +221,33 @@
 <!-- ============================================================= -->
 <!-- FILA: DEFINICIONES E INTERPRETACIONES DEL INDICADOR -->
 <!-- ============================================================= -->
-{% if algoritmos_existentes%}
 <div class="container-fluid my-5">
-    <div class="row">
-        <!-- Columna: Definiciones -->
-        {% if algoritmos_existentes %}
-        <div class="col-xl-6 col-md-12 mb-4">
-            <div class="card shadow border-left-warning h-100">
-                <div class="card-header bg-light">
-                    <h5 class="fw-bold text-warning mb-0">Definiciones de indicadores</h5>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        {% for algoritmo in algoritmos_existentes %}
-                        <div class="col-12 mb-3">
-                            <ul class="list-group">
-                                <li class="list-group-item fw-bold">{{ definicion.get_indicador_display }}</li>
-                                <li class="list-group-item">{{ definicion.algoritmo }}</li>
-                            </ul>
-                        </div>
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
+{% if algoritmos_existentes %}
+<div class="container-fluid my-5">
+    <div class="card shadow border-left-warning mb-4">
+        <div class="card-header bg-light">
+            <h5 class="fw-bold text-warning mb-0">Algoritmos de indicadores</h5>
         </div>
-        {% endif %}
+
+        <div class="card-body text-center">
+            {% for algoritmo in algoritmos_existentes %}
+            <div class="mb-4">
+                <h6 class="fw-bold text-secondary">{{ algoritmo.get_indicador_display }}</h6>
+                {% if algoritmo.algoritmo %}
+                    <img src="{{ algoritmo.algoritmo.url }}" 
+                         alt="Algoritmo {{ algoritmo.get_indicador_display }}"
+                         class="img-fluid rounded shadow-sm"
+                         style="max-height: 400px;">
+                {% else %}
+                    <p class="text-muted mt-2">Sin imagen disponible</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
     </div>
 </div>
 {% endif %}
+</div>
+
 
 {% endblock %}

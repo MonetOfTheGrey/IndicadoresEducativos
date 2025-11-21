@@ -89,7 +89,7 @@ def blank(request):
 
     algoritmos_existentes = algoritmos_indicadores.objects.all()
     if indicador_seleccionado:
-        algoritmos_existentes = interpretaciones_existentes.filter(indicador = indicador_seleccionado)
+        algoritmos_existentes = algoritmos_existentes.filter(indicador = indicador_seleccionado)
 
     contexto = {
         'atencion_345__existentes': atencion_345__existentes,

@@ -1,7 +1,14 @@
 from django.core.files.storage import default_storage
-from panel_datos.models import EducacionPreescolar, EducacionInicial
+from panel_datos.models import EducacionPreescolar, EducacionInicial, MarginacionLocalidad
 import pandas as pd
+import numpy as np
 
+"""
+        hay que construir la conexion entre el excel de marginacion GM
+        construir un código de localidad
+        extraer el grado 
+        realizar conteo y porcentajes
+"""
 class CoberturaEscolarPreescolar:
     def __init__(self):
         # Modelos utilizados
@@ -13,8 +20,28 @@ class CoberturaEscolarPreescolar:
         self.data_frame_inicial = None
         self.data_frame_inicial_rural = None
         self.data_frame_final = None
+        self.data_frame_marginacion_localidad = None
         # Lista de datos extraidos
         self.cobertura_preescolar_lista = []
+    
+    def obtener_marginacion_por_localidad(self):
+        marginacion_localidad_xlsx = None
+        marginacion_localidad_xlsx = MarginacionLocalidad.objects.order_by('-fecha_actualizacion').first()
+        # Comprobacion de que el modelo no está vacio
+        if(marginacion_localidad_xlsx != None):
+            marginacion_localidad_xlsx = marginacion_localidad_xlsx.archivo.path
+            # Comprobacion de que existe en el almacenamiento (ruta)
+            if(default_storage.exists(marginacion_localidad_xlsx)):
+                try:
+                    # Se intenta leer el archivo excel utilizando la ruta recortada
+                    self.data_frame_marginacion_localidad = pd.read_excel(marginacion_localidad_xlsx, sheet_name='IML_2020_2')
+                    print("Se leyó con exito el archivo de Marginación por Localidad")
+                except Exception as e:
+                    print(f"Error al leer el archivo: {e}")
+            else:
+                print(f"El archivo no existe en la ruta {marginacion_localidad_xlsx}")
+        else:
+            print("El modelo esta vacio")
 
     def obtener_911_preescolar(self, ciclo_escolar):
         """
@@ -788,6 +815,90 @@ class CoberturaEscolarPreescolar:
 #.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.
 #                           Tratamiento final
 #.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.
+
+
+    def extraer_grado_de_marg(self):
+        """
+        ╔══════════•⊱✦⊰•══════════╗
+            GRADO DE MARGINACION
+        ╚══════════•⊱✦⊰•══════════╝
+        NOTA IMPORTANTE: Este metodo es extenso y al terminar su ejecucion puede haber errores
+                            en el grado de marginacion asignado a cada localidad.
+                            Dichos errores se solucionan con los metodos al final de la clase
+                            dedicados especificamente a limpiar los datos y corregir este 
+                            tipo de detalles.
+        """
+        try:
+            # Primero se debe construir un identificador total: estado, municipio, localidad.
+            # Se crea un dataframe con el numero de municipio y localidad.
+            
+            id_inicial = pd.DataFrame({
+                "Numero de municipio": self.data_frame_inicial['CV_MUN'].astype(str).str.zfill(3).tolist(),
+                "Numero de localidad": self.data_frame_inicial['CV_LOC'].astype(str).str.zfill(4).tolist()
+            })
+            id_preescolar = pd.DataFrame({
+                "Numero de municipio": self.data_frame_preescolar['CV_MUN'].astype(str).str.zfill(3).tolist(),
+                "Numero de localidad": self.data_frame_preescolar['CV_LOC'].astype(str).str.zfill(4).tolist()
+            })
+            id_comunitaria_preescolar = pd.DataFrame({
+                "Numero de municipio": self.data_frame_preescolar['CV_MUN'].astype(str).str.zfill(3).tolist(),
+                "Numero de localidad": self.data_frame_preescolar['CV_LOC'].astype(str).str.zfill(4).tolist()
+            })
+            # Se concatenan
+            gm_preescolar = pd.concat(
+                [id_inicial, id_preescolar, id_comunitaria_preescolar],
+                ignore_index = True
+            )
+
+            # Posterior a eso se inserta una columna al inicio del dataframe con valores "32", el dato faltante
+            gm_preescolar.insert(0, "Codigo Estado", "32")
+            # Se concatenan las tres columnas en ambos dataframes para crear 'CVE_LOC'
+            gm_preescolar['CVE_LOC'] = (
+                gm_preescolar['Codigo Estado'] + gm_preescolar['Numero de municipio'] + gm_preescolar['Numero de localidad']
+            )
+    
+            # Se eliminan las columnas sobrantes
+            gm_preescolar = gm_preescolar.drop('Codigo Estado', axis=1)
+            gm_preescolar = gm_preescolar.drop('Numero de municipio', axis=1)
+            gm_preescolar = gm_preescolar.drop('Numero de localidad', axis=1)
+            """
+            Ahora que el identificador esta construido se crea un diccionario
+            con 'GM_LOC' y 'CVE_LOC'. Aunque primero hay que verificar que exisstan
+            en el excel de marginacion por localidad
+            """
+            if ('GM_2020' not in self.data_frame_marginacion_localidad.columns or
+                'CVE_LOC' not in self.data_frame_marginacion_localidad.columns):
+                print("Una o ambas columnas 'GM_2020' o 'CVE_LOC' no se encontraron" +
+                        "Verifique los nombres de las columnas en el archivo Excel.")
+                return
+            # Si el paso anterior fue exitoso se crea el diccionario de localidades y sus grados de marginacion
+            diccionario_marginacion = self.data_frame_marginacion_localidad.set_index('CVE_LOC')['GM_2020'].to_dict()
+            # Se verifica que ambas columnas 'CVE_LOC' tengan el formato correcto
+            gm_preescolar['CVE_LOC'] = gm_preescolar['CVE_LOC'].str.strip() # Para eliminar espacios en blacnco
+            self.data_frame_marginacion_localidad['CVE_LOC'] = self.data_frame_marginacion_localidad['CVE_LOC'].astype(str).str.strip()
+            # Se usa el diccionario para mapear y crear la nuvea columna en 'gm_preescolar'
+            diccionario_marginacion = self.data_frame_marginacion_localidad.set_index('CVE_LOC')['GM_2020'].to_dict()
+            # Se mapean los valores de 'GM_2020' utilizando el diccionario
+            gm_preescolar['Grado de marginacion'] = gm_preescolar['CVE_LOC'].map(diccionario_marginacion)
+            # Se reemplazan los valores nulos por 'NO DISPONIBLE'
+            gm_preescolar['Grado de marginacion'] = gm_preescolar['Grado de marginacion'].replace(np.nan, 'NO DISPONIBLE')
+            """
+            # Estas lineas son para imprimir los resultados de estos dataframes
+            # Descomentar para hacer revisiones.
+            print("Contenido de gm_preescolar después del mapeo:")
+            print(gm_preescolar.head())
+            print(gm_preescolar)
+            """
+            # Se elimina la columna del nombre de la localidad para evitar duplicados
+            gm_preescolar = gm_preescolar.drop('CVE_LOC', axis=1)
+            # Se reemplazan los valores nulos
+            gm_preescolar = gm_preescolar.replace(np.nan, 'NO DISPONIBLE')
+            # Se agrega el dataframe a la lista correspondiente
+            self.cobertura_preescolar_lista.append(gm_preescolar)
+            print("\n\tExtraer grado de marginacion concluido")
+        except Exception as e:
+            print(f'Hubo un error extrayendo el grado de marginacion:\n\t{e}')
+
     def crear_data_frame_final(self):
         try:
             print(f"\033[34mGenerando DataFrame Final\033[0m")
@@ -844,6 +955,7 @@ def principal(ciclo_escolar_solicitado):
     extractor_preescolar.obtener_911_preescolar_comunitaria(ciclo_escolar_solicitado)
     extractor_preescolar.obtener_911_inicial(ciclo_escolar_solicitado)
     extractor_preescolar.obtener_911_inicial_comunitaria_rural(ciclo_escolar_solicitado)
+    extractor_preescolar.obtener_marginacion_por_localidad()
     extractor_preescolar.limpiar_911_inicial()
     extractor_preescolar.extraer_estatus_captura(ciclo_escolar_solicitado)
     extractor_preescolar.extraer_cv_ct(ciclo_escolar_solicitado)
@@ -859,6 +971,8 @@ def principal(ciclo_escolar_solicitado):
     extractor_preescolar.extraer_matricula_5_años_hombres()
     extractor_preescolar.extraer_matricula_5_años_mujeres()
     extractor_preescolar.extraer_matricula_total_5_años()
+    extractor_preescolar.extraer_grado_de_marg()
+    
     # Tratamiento final
     extractor_preescolar.crear_data_frame_final()
     extractor_preescolar.eliminar_estatus_captura()

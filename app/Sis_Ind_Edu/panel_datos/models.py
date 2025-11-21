@@ -16,19 +16,6 @@ class ProyeccionesPoblacionales(models.Model):
 
 '''
 ╔─━━━━━━━ ★ ━━━━━━━─╗
-    Marginación 
-    por Localidad
-╚─━━━━━━━ ★ ━━━━━━━─╝
-'''
-class MarginacionLocalidad(models.Model):
-    id = models.AutoField(primary_key=True)
-    actualizado_por = models.ForeignKey(User, on_delete=models.CASCADE)
-    nombre = models.CharField(max_length=100)
-    fecha_actualizacion = models.DateField("Fecha de actualizacion")
-    archivo = models.FileField(upload_to='marginacion_por_localidad/')
-
-'''
-╔─━━━━━━━ ★ ━━━━━━━─╗
 Ciclos Escolares
 ╚─━━━━━━━ ★ ━━━━━━━─╝
 '''
@@ -44,6 +31,24 @@ class CiclosEscolares(models.Model):
 
     def __str__(self):
         return f"{self.inicio}" 
+    
+'''
+╔─━━━━━━━ ★ ━━━━━━━─╗
+    Marginación 
+    por Localidad
+╚─━━━━━━━ ★ ━━━━━━━─╝
+'''
+class MarginacionLocalidad(models.Model):
+    id = models.AutoField(primary_key=True)
+    ciclo_escolar_inicio = models.ForeignKey(
+        CiclosEscolares, 
+        related_name='inicio_marginacion_poblacion345',
+        on_delete = models.CASCADE
+    )
+    nombre = models.CharField(max_length=100)
+    fecha_actualizacion = models.DateField("Fecha de actualizacion")
+    archivo = models.FileField(upload_to='marginacion_por_localidad/')
+
 
 '''
 ╔─━━━━━━━ ★ ━━━━━━━─╗
@@ -103,6 +108,58 @@ Definiciones de
 Indicadores
 ╚─━━━━━━━ ★ ━━━━━━━─╝
 '''
+class MarginacionPoblacion345(models.Model):
+    id = models.AutoField(primary_key = True)
+    ciclo_escolar_inicio = models.ForeignKey(
+        CiclosEscolares,
+        related_name='inicio_marginacion_poblacion_345',
+        on_delete = models.CASCADE
+    )
+    # Porcentajes de marginacion
+    porcentaje_muy_bajo = models.DecimalField(
+        max_digits = 5, decimal_places = 2
+    )
+    porcentaje_bajo = models.DecimalField(
+        max_digits = 5, decimal_places = 2
+    )
+    porcentaje_medio = models.DecimalField(
+        max_digits = 5, decimal_places = 2
+    )
+    porcentaje_alto = models.DecimalField(
+        max_digits = 5, decimal_places = 2
+    )
+    porcentaje_muy_alto = models.DecimalField(
+        max_digits = 5, decimal_places = 2
+    )
+    # Matricula 911
+    matricula_total = models.IntegerField()
+    # Poblacion conapo
+    proyeccion_conapo_poblacion_total = models.IntegerField()
+    # Grupo de edades
+    grupo_de_edad_choices = [
+        ("3", "3 años"),
+        ("4", "4 años"),
+        ("5", "5 años"),
+        ("3-5", "3, 4 y 5 años")
+    ]
+    grupo_de_edad = models.CharField(max_length=3, choices=grupo_de_edad_choices)
+    grafico = models.ImageField(upload_to='marginacion_poblacion_edades_3_4_5/')
+    fecha_actualizacion = models.DateField("Fecha de actualizacion")
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['ciclo_escolar_inicio', 'grupo_de_edad'],
+                name='unique_atencion_por_ciclo_y_edad'
+            )
+        ]
+
+'''
+╔─━━━━━━━ ★ ━━━━━━━─╗
+Definiciones de
+Indicadores
+╚─━━━━━━━ ★ ━━━━━━━─╝
+'''
 class IndicadorDefinicion(models.Model):
     # TODO: Convertir UNIQUE el campo indicador para evitar repetidos
     id = models.AutoField(primary_key=True)
@@ -143,11 +200,11 @@ class interpretaciones_indicadores(models.Model):
 '''
 class algoritmos_indicadores(models.Model):
     id = models.AutoField(primary_key=True)
-    indicador_choices = {
-        "AE3": "Atención Edad 3 años",
-        "AE4": "Atención Edad 4 años",
-        "AE5": "Atención Edad 5 años"
-    }
+    indicador_choices = [
+        ("AE3", "Atención Edad 3 años"),
+        ("AE4", "Atención Edad 4 años"),
+        ("AE5", "Atención Edad 5 años"),
+    ]
     indicador = models.CharField(
         max_length = 3,
         choices = indicador_choices
