@@ -1,5 +1,5 @@
 # Repositorio código Indicadores Educativos
-* La rama con los cambios más recientes es DESARROLLO *
+La rama con los cambios más recientes es DESARROLLO
 Main solamente es utilizada para cambios aprobados.
 Se debe copiar el repositorio y levantar el contenedor mediante:
 """
