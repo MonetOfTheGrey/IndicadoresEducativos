@@ -3,12 +3,6 @@ from panel_datos.models import EducacionPreescolar, EducacionInicial, Marginacio
 import pandas as pd
 import numpy as np
 
-"""
-        hay que construir la conexion entre el excel de marginacion GM
-        construir un código de localidad
-        extraer el grado 
-        realizar conteo y porcentajes
-"""
 class CoberturaEscolarPreescolar:
     def __init__(self):
         # Modelos utilizados
@@ -23,25 +17,6 @@ class CoberturaEscolarPreescolar:
         self.data_frame_marginacion_localidad = None
         # Lista de datos extraidos
         self.cobertura_preescolar_lista = []
-    
-    def obtener_marginacion_por_localidad(self):
-        marginacion_localidad_xlsx = None
-        marginacion_localidad_xlsx = MarginacionLocalidad.objects.order_by('-fecha_actualizacion').first()
-        # Comprobacion de que el modelo no está vacio
-        if(marginacion_localidad_xlsx != None):
-            marginacion_localidad_xlsx = marginacion_localidad_xlsx.archivo.path
-            # Comprobacion de que existe en el almacenamiento (ruta)
-            if(default_storage.exists(marginacion_localidad_xlsx)):
-                try:
-                    # Se intenta leer el archivo excel utilizando la ruta recortada
-                    self.data_frame_marginacion_localidad = pd.read_excel(marginacion_localidad_xlsx, sheet_name='IML_2020_2')
-                    print("Se leyó con exito el archivo de Marginación por Localidad")
-                except Exception as e:
-                    print(f"Error al leer el archivo: {e}")
-            else:
-                print(f"El archivo no existe en la ruta {marginacion_localidad_xlsx}")
-        else:
-            print("El modelo esta vacio")
 
     def obtener_911_preescolar(self, ciclo_escolar):
         """
@@ -177,6 +152,27 @@ class CoberturaEscolarPreescolar:
                         print(f'\033[31mEl archivo no existe en la ruta: {direccion_ed_inicial}\033[0m')
         else:
             print(f'\033[31mCiclos escolares anteriores a 2024-2025 no cuentan com Educación Inicial Comunitaria Rural \033[0m')
+   
+    def obtener_marginacion_por_localidad(self):
+        marginacion_localidad_xlsx = None
+        marginacion_localidad_xlsx = MarginacionLocalidad.objects.order_by('fecha_actualizacion').first()
+        # Comprobacion de que el modelo no está vacio
+        if(marginacion_localidad_xlsx != None):
+            marginacion_localidad_xlsx = marginacion_localidad_xlsx.archivo.path
+            # Comprobacion de que existe en el almacenamiento (ruta)
+            if(default_storage.exists(marginacion_localidad_xlsx)):
+                try:
+                    print(default_storage.path(marginacion_localidad_xlsx))
+                    print("*--*-*-*-*-*-*-*-*-*-*-**-*-*-*-*-*-*-*-*-*-*-*-")
+                    # Se intenta leer el archivo excel utilizando la ruta recortada
+                    self.data_frame_marginacion_localidad = pd.read_excel(marginacion_localidad_xlsx, sheet_name='IML_2020_2')
+                    print("Se leyó con exito el archivo de Marginación por Localidad")
+                except Exception as e:
+                    print(f"Error al leer el archivo: {e}")
+            else:
+                print(f"El archivo no existe en la ruta {marginacion_localidad_xlsx}")
+        else:
+            print("El modelo esta vacio")
 
     def limpiar_911_inicial(self):
         """
@@ -816,7 +812,6 @@ class CoberturaEscolarPreescolar:
 #                           Tratamiento final
 #.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.
 
-
     def extraer_grado_de_marg(self):
         """
         ╔══════════•⊱✦⊰•══════════╗
@@ -972,7 +967,6 @@ def principal(ciclo_escolar_solicitado):
     extractor_preescolar.extraer_matricula_5_años_mujeres()
     extractor_preescolar.extraer_matricula_total_5_años()
     extractor_preescolar.extraer_grado_de_marg()
-    
     # Tratamiento final
     extractor_preescolar.crear_data_frame_final()
     extractor_preescolar.eliminar_estatus_captura()

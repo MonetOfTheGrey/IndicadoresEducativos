@@ -23,6 +23,7 @@ class CalculadoraCoberturaPreescolar:
                 "matricula": {"hombres": None, "mujeres": None, "total": None},
                 "atencion": {"hombres": None, "mujeres": None, "total": None},
                 "poblacion": {"hombres": None, "mujeres": None, "total": None},
+                
                 "matricula_gm": {"muy bajo": None, "bajo": None, "medio": None, "alto": None, "muy alto": None, "total": None},
                 "porcentaje_matricula_gm": {"muy bajo": None, "bajo": None, "medio": None, "alto": None, "muy alto": None, "total": None},
             },
@@ -163,6 +164,7 @@ class CalculadoraCoberturaPreescolar:
         except Exception as e:
             print(f'\033[31mHubo un error generando Gráfico Atención total a la Población de 3 años para el ciclo escolar {self.ciclo_escolar.inicio}:\n\t{e}\033[0m')
 
+
     def extraer_datos_grado_marginacion_3_años(self):
         try:
             # Menores de 3 años
@@ -171,8 +173,9 @@ class CalculadoraCoberturaPreescolar:
             # Matricula de 3 años
             data_frame_total_hombres_matricula_3_años = self.data_frame_final['Alumnos de 3 años hombres']
             data_frame_total_mujeres_matricula_3_años = self.data_frame_final['Alumnos de 3 años mujeres']
-
             # Grado de marginacion
+            print("-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
+            print(self.data_frame_final.head())
             data_frame_grado_marginacion = self.data_frame_final['Grado de marginacion']
             data_frame_matricula_total = pd.concat(
                 [data_frame_total_mujeres_matricula_menor_3_años,
@@ -182,10 +185,14 @@ class CalculadoraCoberturaPreescolar:
                 data_frame_grado_marginacion],
                 axis=1
             )
-            data_frame_matricula_total['Matricula Total'] = data_frame_matricula_total[['Alumnos menores de 3 años mujeres',
-                                                                     'Alumnos menores de 3 años hombres',
-                                                                     'Alumnos de 3 años mujeres',
-                                                                     'Alumnos de 3 años hombres']]
+            cols = [
+                'Alumnos menores de 3 años mujeres',
+                'Alumnos menores de 3 años hombres',
+                'Alumnos de 3 años mujeres',
+                'Alumnos de 3 años hombres'
+            ]
+
+            data_frame_matricula_total['Matricula Total'] = data_frame_matricula_total[cols].sum(axis=1)
             resultado = data_frame_matricula_total.groupby('Grado de marginacion')['Matricula Total'].sum()
 
             self.datos["3"]["matricula_gm"]["muy bajo"] = resultado['Muy bajo']

@@ -4,7 +4,7 @@
                     <h3 class="text-dark mb-4">Algoritmos de indicadores</h3>
                     <div class="card shadow" style="margin-top: 1%;">
                         <div class="card-header py-3">
-                            <p class="text-primary m-0 fw-bold">Formato para actualizar algoritmos de indicadores</p>
+                            <p class="text-primary m-0 fw-bold">Formato para actualizar Algoritmos de indicadores</p>
                         </div>
                         <div class="card-body">
 <!----------------------------------Comienza la tabla de formulario---------------------------------->
@@ -14,7 +14,7 @@
         <div class="accordion-item">
             <h2 class="accordion-header" id="headingTabla">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTabla" aria-expanded="false" aria-controls="collapseTabla">
-                    Formulario de algoritmos
+                    Formulario de Algoritmos
                 </button>
             </h2>
             <div id="collapseTabla" class="accordion-collapse collapse" aria-labelledby="headingTabla" data-bs-parent="#tablaAccordion">
@@ -71,7 +71,7 @@
                     </div><!-- Inicia la tabla de datos ya existentes -->
 <div class="card shadow" style="margin-top: 1%;">
     <div class="card-header py-3">
-        <p class="text-primary m-0 fw-bold">Información de Bases existentes</p>
+        <p class="text-primary m-0 fw-bold">Información de Algoritmos existentes</p>
     </div>
     <div class="card-body">
         <div class="table-responsive mt-2 table" id="dataTable-2">
@@ -83,15 +83,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                {% for algoritmo_existente in algoritmos_existentes %}
+                {% for indicador_existente in indicadores_existentes %}
                     <tr>
-                        <td>{{ algoritmo_existente.get_indicador_display  }}</td>
-                {% if algoritmo_existente.algoritmo %}
-                    <img class="rounded d-block" style="width: 300px; height: 200px;" 
-                        src="{{ algoritmo_existente.algoritmo.url }}" alt="Imagen del algoritmo">
-                {% else %}
-                    <p>No hay imagen disponible</p>
-                {% endif %}
+                        <td>{{ indicador_existente.get_indicador_display  }}</td>
+                        <td>{{ indicador_existente.algoritmo }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>

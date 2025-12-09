@@ -14,6 +14,7 @@ class ProyeccionesPoblacionales(models.Model):
     fecha_actualizacion = models.DateField("Fecha de actualizacion")
     archivo = models.FileField(upload_to='csv_pob_mitad/')
 
+
 '''
 ╔─━━━━━━━ ★ ━━━━━━━─╗
 Ciclos Escolares
@@ -31,7 +32,7 @@ class CiclosEscolares(models.Model):
 
     def __str__(self):
         return f"{self.inicio}" 
-    
+
 '''
 ╔─━━━━━━━ ★ ━━━━━━━─╗
     Marginación 
@@ -40,16 +41,10 @@ class CiclosEscolares(models.Model):
 '''
 class MarginacionLocalidad(models.Model):
     id = models.AutoField(primary_key=True)
-    ciclo_escolar_inicio = models.ForeignKey(
-        CiclosEscolares, 
-        related_name='inicio_marginacion_poblacion345',
-        on_delete = models.CASCADE
-    )
     nombre = models.CharField(max_length=100)
     fecha_actualizacion = models.DateField("Fecha de actualizacion")
     archivo = models.FileField(upload_to='marginacion_por_localidad/')
-
-
+    actualizado_por = models.ForeignKey(User, on_delete=models.CASCADE)
 '''
 ╔─━━━━━━━ ★ ━━━━━━━─╗
     Atención a la
@@ -102,12 +97,7 @@ class AtencionPoblacion345(models.Model):
                 name='unique_atencion_por_ciclo_y_edad'
             )
         ]
-'''
-╔─━━━━━━━ ★ ━━━━━━━─╗
-Definiciones de
-Indicadores
-╚─━━━━━━━ ★ ━━━━━━━─╝
-'''
+
 class MarginacionPoblacion345(models.Model):
     id = models.AutoField(primary_key = True)
     ciclo_escolar_inicio = models.ForeignKey(
@@ -146,13 +136,6 @@ class MarginacionPoblacion345(models.Model):
     grafico = models.ImageField(upload_to='marginacion_poblacion_edades_3_4_5/')
     fecha_actualizacion = models.DateField("Fecha de actualizacion")
 
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(
-                fields=['ciclo_escolar_inicio', 'grupo_de_edad'],
-                name='unique_atencion_por_ciclo_y_edad'
-            )
-        ]
 
 '''
 ╔─━━━━━━━ ★ ━━━━━━━─╗
