@@ -125,7 +125,80 @@
 {% endif %}
 
 <!-- ============================================================= -->
+<!-- TARJETAS MARGINACIÓN FILTRADAS -->
+<!-- ============================================================= -->
+{% if graficos_marginacion_existentes %}
+    <div class="container-fluid my-5">
+        {% for grafico in graficos_marginacion_existentes %}
+        <div class="card shadow mb-4 border-left-primary">
+            <div class="card-header">
+                    <h5 class="fw-bold text-primary">
+                        Grupo de edad: {{ grafico.get_grupo_de_edad_display }}
+                    </h5>
+                <small class="text-muted">
+                    Ciclo escolar: {{ grafico.ciclo_escolar_inicio.inicio }} - {{ grafico.ciclo_escolar_inicio.fin }}
+                </small><br>
+                <small class="text-muted">
+                    Actualizado el {{ grafico.fecha_actualizacion }}
+                </small>
+
+                <button class="btn btn-sm btn-outline-primary mt-2" type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#contenidoMarginacion{{ grafico.id }}">
+                    Ver/ocultar datos
+                </button>
+            </div>
+
+            <div id="contenidoMarginacion{{ grafico.id }}" class="collapse show">
+                <div class="card-body">
+                    <div class="row">
+
+                        <!-- Gráfico -->
+                         <div class="col-xl-6">
+                            <h6 class="text-secondary">Gráfico generado</h6>
+                            <img src="{{ grafico.grafico.url }}" class="img-fluid"
+                                 alt="Gráfico de marginación para {{ grafico.get_grupo_de_edad_display }}">
+                         </div>
+                         <!-- Datos -->
+                          <div class="col-xl-6">
+
+                            <!-- Porcentajes de marginacion -->
+
+                             <h6 class="text-secondary">Porcentajes de marginación</h6>
+                             <!-- Porcentajes de amrginación-->
+                             <ul class="list-group mb-3">
+                                <li class="list-group-item">Grado de marginación muy bajo: {{ grafico.porcentaje_muy_bajo }}%</li>
+                                <li class="list-group-item">Grado de marginación bajo: {{ grafico.porcentaje_bajo }}%</li>
+                                <li class="list-group-item">Grado de marginación medio: {{ grafico.porcentaje_medio }}%</li>
+                                <li class="list-group-item">Grado de marginación alto: {{ grafico.porcentaje_alto }}%</li>
+                                <li class="list-group-item">Grado de marginación muy alto: {{ grafico.porcentaje_muy_alto }}%</li>
+                             </ul>
+
+                             <!-- Matricula total -->
+                            <h6 class="text-secondary">Matricula total</h6>
+                            <ul class="list-group">
+                                <li class="list-group-item">Matricula total: {{ grafico.matricula_total }}</li>
+                            </ul>
+
+                            <!-- Proyecciones CONAPO -->
+                            <h6 class="text-secondary">Proyecciones CONAPO</h6>
+                            <ul class="list-group">
+                                <li class="list-group-item">Total de población: {{ grafico.proyeccion_conapo_poblacion_total }}</li>
+                            </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p class="text-muted">No hay datos de marginación para el indicador y ciclo escolar seleccionados.</p>
+{% endif %}
+
+<!-- ============================================================= -->
 <!-- SECCIÓN DE SERIE HISTÓRICA -->
+<!-- TODO: Corregir el loop para no cargar todos los graficos multiples -->
 <!-- ============================================================= -->
 {% if graficos_multiples_existentes %}
     {% for grafico in graficos_multiples_existentes %}

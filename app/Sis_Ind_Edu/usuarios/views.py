@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
-from panel_datos.models import AtencionPoblacion345, graficos_multiples, CiclosEscolares
+from panel_datos.models import AtencionPoblacion345, graficos_multiples, CiclosEscolares, MarginacionPoblacion345
 from panel_datos.models import IndicadorDefinicion, interpretaciones_indicadores, algoritmos_indicadores
 from django.db.models import Q
 # Create your views here.
@@ -21,20 +21,6 @@ def iniciar_sesion(request):
     else:
         return render(request, 'iniciar_sesion.html')
     
-def blank_original(request):
-    # Se tiene que hacer un contexto para pasarlo a la plantilla y lo reenderice
-    atencion_345__existentes = list(
-        AtencionPoblacion345.objects.all()
-    )
-    graficos_multiples_existentes = list(
-        graficos_multiples.objects.all()
-    )
-    contexto = {
-        'atencion_345__existentes': atencion_345__existentes,
-        'graficos_multiples_existentes': graficos_multiples_existentes
-    }
-    return render(request, 'inicio.html', contexto)
-
 
 def blank(request):
     indicador_seleccionado = request.GET.get("indicador")
@@ -71,11 +57,20 @@ def blank(request):
             pass
 
     atencion_345__existentes = list(atencion_qs)
+    # TODO: Revisar porque no se estan enviando graficos
+    # Filtrando gráficos de marginación por localidad
+    graficos_marginacion_existentes = MarginacionPoblacion345.objects.all()
+    if indicador_seleccionado:
+        graficos_marginacion_existentes = graficos_marginacion_existentes.filter(indicador=indicador_seleccionado)
+    if ciclo_seleccionado:
+        graficos_marginacion_existentes = graficos_marginacion_existentes.filter(ciclo_escolar_inicio_id=ciclo_int)
 
     # Filtrado de gráficos múltiples según el indicador seleccionado
     graficos_multiples_existentes = graficos_multiples.objects.all()
     if indicador_seleccionado:
         graficos_multiples_existentes = graficos_multiples_existentes.filter(indicador=indicador_seleccionado)
+
+
 
     # Filtrado de definicion de indicadores segun el indicador seleccioando
     definiciones_existentes = IndicadorDefinicion.objects.all()
@@ -93,10 +88,11 @@ def blank(request):
 
     contexto = {
         'atencion_345__existentes': atencion_345__existentes,
+        'graficos_marginacion_existentes': graficos_marginacion_existentes,
         'ciclos_escolares': ciclos_escolares,
         'indicadores': indicadores,
         'indicador_seleccionado': indicador_seleccionado,
-        'nombre_indicador': nombre_indicador,  # <-- nombre del indicador listo para usar
+        'nombre_indicador': nombre_indicador,
         'ciclo_seleccionado': ciclo_seleccionado,
         'graficos_multiples_existentes': graficos_multiples_existentes,
         'definiciones_existentes': definiciones_existentes,

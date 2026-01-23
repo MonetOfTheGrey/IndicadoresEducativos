@@ -133,8 +133,25 @@ class MarginacionPoblacion345(models.Model):
         ("3-5", "3, 4 y 5 años")
     ]
     grupo_de_edad = models.CharField(max_length=3, choices=grupo_de_edad_choices)
+    indicador_choices = {
+        "AE3": "Atención Edad 3 años",
+        "AE4": "Atención Edad 4 años",
+        "AE5": "Atención Edad 5 años"
+    }
+    indicador = models.CharField(
+        max_length = 3,
+        choices = indicador_choices
+    )
     grafico = models.ImageField(upload_to='marginacion_poblacion_edades_3_4_5/')
     fecha_actualizacion = models.DateField("Fecha de actualizacion")
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['ciclo_escolar_inicio', 'grupo_de_edad'],
+                name='unique_marginacion_por_ciclo_y_edad'
+            )
+        ]
+
 
 
 '''
@@ -224,6 +241,14 @@ class graficos_multiples(models.Model):
     )
     grafico = models.ImageField(upload_to='graficos_multiplesciclos/')
     fecha_actualizacion = models.DateField("Fecha de actualizacion")
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['primer_ciclo_escolar', 'ultimo_ciclo_escolar', 'indicador'],
+                name='unique_graficos_multiples_por_ciclo_e_indicador'
+            )
+        ]
+
 
 '''
 ╔─━━━━━━━ ★ ━━━━━━━─╗

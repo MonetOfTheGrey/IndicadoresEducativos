@@ -1,4 +1,3 @@
-
 from django.core.files.base import ContentFile
 # Se necesitan todas las bases de datos, al menos por ahora
 from panel_datos.models import AtencionPoblacion345, graficos_multiples, MarginacionPoblacion345
@@ -6,6 +5,7 @@ import io
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
+import numpy as np
 from datetime import date
 
 class CalculadoraCoberturaPreescolar:
@@ -31,11 +31,17 @@ class CalculadoraCoberturaPreescolar:
                 "matricula": {"hombres": None, "mujeres": None, "total": None},
                 "atencion": {"hombres": None, "mujeres": None, "total": None},
                 "poblacion": {"hombres": None, "mujeres": None, "total": None},
+
+                "matricula_gm": {"muy bajo": None, "bajo": None, "medio": None, "alto": None, "muy alto": None, "total": None},
+                "porcentaje_matricula_gm": {"muy bajo": None, "bajo": None, "medio": None, "alto": None, "muy alto": None, "total": None},
             },
             "5": {
                 "matricula": {"hombres": None, "mujeres": None, "total": None},
                 "atencion": {"hombres": None, "mujeres": None, "total": None},
                 "poblacion": {"hombres": None, "mujeres": None, "total": None},
+                
+                "matricula_gm": {"muy bajo": None, "bajo": None, "medio": None, "alto": None, "muy alto": None, "total": None},
+                "porcentaje_matricula_gm": {"muy bajo": None, "bajo": None, "medio": None, "alto": None, "muy alto": None, "total": None},
             },
         }
 
@@ -127,7 +133,7 @@ class CalculadoraCoberturaPreescolar:
             total_altura = [porcentajes_mujeres[0], porcentajes_hombres[0], porcentajes_restante[0]]
             acumulado = 0
             for i, valor in enumerate(total_altura):
-                ax.text(0, acumulado + valor / 2, f'{valor:.1f}%', ha='center', va='center', color='white', fontsize=10)
+                ax.text(0, acumulado + valor / 2, f'{valor:.2f}%', ha='center', va='center', color='white', fontsize=10)
                 acumulado += valor
 
             # Estética
@@ -210,8 +216,8 @@ class CalculadoraCoberturaPreescolar:
         try:
             print(f"\033[34mCalculando grado de marginacion para atención para población de 3 años para el ciclo escolar {self.ciclo_escolar.inicio}\033[0m")
             # Atención a GM muy bajo = (matricula_gm_mb / poblacion_total) * 100
-            self.datos['3']['porcentaje_matricula_gm']['muy_bajo'] = (
-                self.datos['3']['matricula_gm']['muy_bajo'] / self.datos['3']['poblacion']['total'] ) * 100
+            self.datos['3']['porcentaje_matricula_gm']['muy bajo'] = (
+                self.datos['3']['matricula_gm']['muy bajo'] / self.datos['3']['poblacion']['total'] ) * 100
             # Bajo
             self.datos['3']['porcentaje_matricula_gm']['bajo'] = (
                 self.datos['3']['matricula_gm']['bajo'] / self.datos['3']['poblacion']['total'] ) * 100
@@ -247,8 +253,8 @@ class CalculadoraCoberturaPreescolar:
             valores_medio = self.datos["3"]["porcentaje_matricula_gm"]["medio"]
             valores_alto = self.datos["3"]["porcentaje_matricula_gm"]["alto"]
             valores_muy_alto = self.datos["3"]["porcentaje_matricula_gm"]["muy alto"]
-            valores_sin_atencion = 100 - (valores_muy_bajo + valores_bajo + valores_medio, valores_alto, valores_muy_alto)
 
+            valores_sin_atencion = 100 - (valores_muy_bajo + valores_bajo + valores_medio + valores_alto + valores_muy_alto)
             # Datos para gráfica apilada
             categorias = ['Atención - Grados de marginación']
             porcentajes_muy_bajo = [valores_muy_bajo]
@@ -260,54 +266,48 @@ class CalculadoraCoberturaPreescolar:
 
             # Paleta de colores estilo "mako"
             colores = sns.color_palette("mako", n_colors=6)
-
+            x = np.arange(len(categorias))
+            width = 0.13
             # Creación de gráfico
             fig, ax = plt.subplots(figsize=(6, 6))
-
-            # Apilamiento
-            ax.bar(categorias, porcentajes_muy_bajo, 
-                label='Muy bajo', color=colores[0])
-
-            ax.bar(categorias, porcentajes_bajo,
-                bottom=porcentajes_muy_bajo,
-                label='Bajo', color=colores[1])
-
-            ax.bar(categorias, porcentajes_medio,
-                bottom=[porcentajes_muy_bajo[0] + porcentajes_bajo[0]],
-                label='Medio', color=colores[2])
-
-            ax.bar(categorias, porcentajes_alto,
-                bottom=[porcentajes_muy_bajo[0] + porcentajes_bajo[0] + porcentajes_medio[0]],
-                label='Alto', color=colores[3])
-
-            ax.bar(categorias, porcentajes_muy_alto,
-                bottom=[porcentajes_muy_bajo[0] + porcentajes_bajo[0] + porcentajes_medio[0] + porcentajes_alto[0]],
-                label='Muy alto', color=colores[4])
-
-            ax.bar(categorias, porcentajes_restante,
-                bottom=[porcentajes_muy_bajo[0] + porcentajes_bajo[0] + porcentajes_medio[0] +
-                        porcentajes_alto[0] + porcentajes_muy_alto[0]],
-                label='Sin atención', color=colores[5])
+            # Figuras
+            ax.bar(x - 2.5*width, porcentajes_muy_bajo, width,
+                    label='Muy bajo', color = colores[0])
             
-            # Terminar las etiquetas y el modelo
-            # Etiquetas
-            total_marginacion = [
-            porcentajes_muy_bajo[0],
-            porcentajes_bajo[0],
-            porcentajes_medio[0],
-            porcentajes_alto[0],
-            porcentajes_muy_alto[0],
-            porcentajes_restante[0]
-            ]
-            acumulado = 0
-            for i, valor in enumerate(total_marginacion):
-                ax.text(0, acumulado + valor / 2, f'{valor:.1f}%', ha='center', va='center', color='white', fontsize=10)
-                acumulado += valor
+            ax.bar(x - 1.5*width, porcentajes_bajo, width,
+                   label='Bajo', color = colores[1])
+            
+            ax.bar(x - 0.5*width, porcentajes_medio, width,
+                   label='Medio', color = colores[2])
+            
+            ax.bar(x + 0.5*width, porcentajes_alto, width,
+                   label='Alto', color = colores[3])
+            
+            ax.bar(x + 1.5*width, porcentajes_muy_alto, width,
+                   label = 'Muy Alto', color = colores[4])
+                   
+            ax.bar(x + 2.5*width, porcentajes_restante, width,
+                   label = 'Sin atención', color = colores[5])
+
+            for rect in ax.patches:
+                height = rect.get_height()
+                if height >= 0:
+                    ax.text(
+                        rect.get_x() +  rect.get_width() / 2,
+                        height + 1,
+                        f'{height:.2f}%',
+                        ha='center',
+                        va='bottom',
+                        color='black', 
+                        fontsize=10
+                    )
+
             # Estetica
             ax.set_ylim(0, 110)
             ax.set_ylabel('Porcentaje')
-            ax.set_titile('Marginación por localidad para Atención de población de 3 años({self.ciclo_escolar.inicio})', fontsize=14)
-            ax.set_xticks([[]])
+            ax.set_xlabel('Grados de marginación')
+            ax.set_title(f'Marginación por localidad para Atención de población de 3 años({self.ciclo_escolar.inicio})', fontsize=14)
+            ax.set_xticks([])
             ax.legend(loc='upper right')
             # Guardar grafico
             buffer = io.BytesIO()
@@ -324,6 +324,7 @@ class CalculadoraCoberturaPreescolar:
                 matricula_total = self.datos["3"]["matricula"]["total"],
                 proyeccion_conapo_poblacion_total=self.datos["3"]["poblacion"]["total"],
                 grupo_de_edad="3",
+                indicador = "AE3",
                 fecha_actualizacion=date.today()
                 )
             nombre_del_grafico = f"marginacion_poblacion_edad_3_{self.ciclo_escolar.inicio}_{self.ciclo_escolar.fin}.png"
@@ -332,6 +333,7 @@ class CalculadoraCoberturaPreescolar:
             buffer.close()
         except Exception as e:
             print(f'\033[31mHubo un error generando Gráfico Marginación por localidad para Población de 3 años para el ciclo escolar {self.ciclo_escolar.inicio}:\n\t{e}\033[0m')
+
     """
     ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ 
     ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ 
@@ -408,7 +410,7 @@ class CalculadoraCoberturaPreescolar:
             total_altura = [porcentajes_mujeres[0], porcentajes_hombres[0], porcentajes_restante[0]]
             acumulado = 0
             for i, valor in enumerate(total_altura):
-                ax.text(0, acumulado + valor / 2, f'{valor:.1f}%', ha='center', va='center', color='white', fontsize=10)
+                ax.text(0, acumulado + valor / 2, f'{valor:.2f}%', ha='center', va='center', color='white', fontsize=10)
                 acumulado += valor
 
             # Estética
@@ -444,6 +446,166 @@ class CalculadoraCoberturaPreescolar:
             buffer.close()
         except Exception as e:
             print(f'\033[31mHubo un error generando Gráfico Atención total a la Población de 4 años para el ciclo escolar {self.ciclo_escolar.inicio}:\n\t{e}\033[0m')
+
+
+    def extraer_datos_grado_marginacion_4_años(self):
+        try:
+            # Matricula de 3 años
+            data_frame_total_hombres_matricula_4_años = self.data_frame_final['Alumnos de 4 años hombres']
+            data_frame_total_mujeres_matricula_4_años = self.data_frame_final['Alumnos de 4 años mujeres']
+            # Grado de marginacion
+            print("-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
+            print(self.data_frame_final.head())
+            data_frame_grado_marginacion = self.data_frame_final['Grado de marginacion']
+            data_frame_matricula_total = pd.concat(
+                [
+                data_frame_total_mujeres_matricula_4_años,
+                data_frame_total_hombres_matricula_4_años,
+                data_frame_grado_marginacion],
+                axis=1
+            )
+            cols = [
+                'Alumnos de 4 años mujeres',
+                'Alumnos de 4 años hombres'
+            ]
+
+            data_frame_matricula_total['Matricula Total'] = data_frame_matricula_total[cols].sum(axis=1)
+            resultado = data_frame_matricula_total.groupby('Grado de marginacion')['Matricula Total'].sum()
+
+            self.datos["4"]["matricula_gm"]["muy bajo"] = resultado['Muy bajo']
+            self.datos["4"]["matricula_gm"]["bajo"] = resultado['Bajo']
+            self.datos["4"]["matricula_gm"]["medio"] = resultado['Medio']
+            self.datos["4"]["matricula_gm"]["alto"] = resultado['Alto']
+            self.datos["4"]["matricula_gm"]["muy alto"] = resultado['Muy alto']
+            self.datos["4"]["matricula_gm"]["total"] = (resultado['Muy bajo'] + resultado['Bajo'] +
+                                                        resultado['Medio'] + resultado['Alto'] + 
+                                                        resultado['Muy alto'])
+        except Exception as e:
+            print(f'\033[31mHubo un error extrayendo datos (grado de marginacion) para Atención total a la Población de 4 años para el ciclo escolar {self.ciclo_escolar.inicio}:\n\t{e}\033[0m')
+
+
+    def  calcular_grado_marginacion_4_años(self):
+        try:
+            print(f"\033[34mCalculando grado de marginacion para atención para población de 4 años para el ciclo escolar {self.ciclo_escolar.inicio}\033[0m")
+            # Atención a GM muy bajo = (matricula_gm_mb / poblacion_total) * 100
+            self.datos['4']['porcentaje_matricula_gm']['muy bajo'] = (
+                self.datos['4']['matricula_gm']['muy bajo'] / self.datos['4']['poblacion']['total'] ) * 100
+            # Bajo
+            self.datos['4']['porcentaje_matricula_gm']['bajo'] = (
+                self.datos['4']['matricula_gm']['bajo'] / self.datos['4']['poblacion']['total'] ) * 100
+            # Medio
+            self.datos['4']['porcentaje_matricula_gm']['medio'] = (
+                self.datos['4']['matricula_gm']['medio'] / self.datos['4']['poblacion']['total'] ) * 100
+            # Alto
+            self.datos['4']['porcentaje_matricula_gm']['alto'] = (
+                self.datos['4']['matricula_gm']['alto'] / self.datos['4']['poblacion']['total'] ) * 100
+            # Muy alto
+            self.datos['4']['porcentaje_matricula_gm']['muy alto'] = (
+                self.datos['4']['matricula_gm']['muy alto'] / self.datos['4']['poblacion']['total'] ) * 100
+            # Total
+            self.datos['4']['porcentaje_matricula_gm']['total'] = (
+                self.datos['4']['matricula_gm']['total'] / self.datos['4']['poblacion']['total'] ) * 100
+            
+            # Se muestran los datos
+            print(f'Atención grado de marginación muy bajo 4 años: {self.datos["4"]["porcentaje_matricula_gm"]["muy bajo"]}')
+            print(f'Atención grado de marginación bajo 4 años: {self.datos["4"]["porcentaje_matricula_gm"]["bajo"]}')
+            print(f'Atención grado de marginación medio 4 años: {self.datos["4"]["porcentaje_matricula_gm"]["medio"]}')
+            print(f'Atención grado de marginación alto 4 años: {self.datos["4"]["porcentaje_matricula_gm"]["alto"]}')
+            print(f'Atención grado de marginación muy alto 4 años: {self.datos["4"]["porcentaje_matricula_gm"]["muy alto"]}')
+            print(f'Atención total 4 años: {self.datos["4"]["porcentaje_matricula_gm"]["total"]}')
+        except Exception as e:
+            print(f'\033[31mHubo un error Calculando Grado de Marginacion para Atención total a la Población de 4 años para el ciclo escolar {self.ciclo_escolar.inicio}:\n\t{e}\033[0m')
+
+    def generar_grafico_grado_marginacion_atencion_individual_poblacion_4_años(self):
+        try:
+            print(f"\033[34mGenerando Gráfico Grado de Marginacion para Atención individual a la Población total de 4 años para el ciclo escolar {self.ciclo_escolar.inicio}\033[0m")
+            # Valores ya calculados
+            valores_muy_bajo = self.datos["4"]["porcentaje_matricula_gm"]["muy bajo"]
+            valores_bajo = self.datos["4"]["porcentaje_matricula_gm"]["bajo"]
+            valores_medio = self.datos["4"]["porcentaje_matricula_gm"]["medio"]
+            valores_alto = self.datos["4"]["porcentaje_matricula_gm"]["alto"]
+            valores_muy_alto = self.datos["4"]["porcentaje_matricula_gm"]["muy alto"]
+
+            valores_sin_atencion = 100 - (valores_muy_bajo + valores_bajo + valores_medio + valores_alto + valores_muy_alto)
+            # Datos para gráfica apilada
+            categorias = ['Atención - Grados de marginación']
+            porcentajes_muy_bajo = [valores_muy_bajo]
+            porcentajes_bajo = [valores_bajo]
+            porcentajes_medio = [valores_medio]
+            porcentajes_alto = [valores_alto]
+            porcentajes_muy_alto = [valores_muy_alto]
+            porcentajes_restante = [valores_sin_atencion]
+
+            # Paleta de colores estilo "mako"
+            colores = sns.color_palette("mako", n_colors=6)
+            x = np.arange(len(categorias))
+            width = 0.13
+            # Creación de gráfico
+            fig, ax = plt.subplots(figsize=(6, 6))
+            # Figuras
+            ax.bar(x - 2.5*width, porcentajes_muy_bajo, width,
+                    label='Muy bajo', color = colores[0])
+            
+            ax.bar(x - 1.5*width, porcentajes_bajo, width,
+                   label='Bajo', color = colores[1])
+            
+            ax.bar(x - 0.5*width, porcentajes_medio, width,
+                   label='Medio', color = colores[2])
+            
+            ax.bar(x + 0.5*width, porcentajes_alto, width,
+                   label='Alto', color = colores[3])
+            
+            ax.bar(x + 1.5*width, porcentajes_muy_alto, width,
+                   label = 'Muy Alto', color = colores[4])
+                   
+            ax.bar(x + 2.5*width, porcentajes_restante, width,
+                   label = 'Sin atención', color = colores[5])
+
+            for rect in ax.patches:
+                height = rect.get_height()
+                if height >= 0:
+                    ax.text(
+                        rect.get_x() +  rect.get_width() / 2,
+                        height + 1,
+                        f'{height:.2f}%',
+                        ha='center',
+                        va='bottom',
+                        color='black', 
+                        fontsize=10
+                    )
+
+            # Estetica
+            ax.set_ylim(0, 110)
+            ax.set_ylabel('Porcentaje')
+            ax.set_xlabel('Grados de marginación')
+            ax.set_title(f'Marginación por localidad para Atención de población de 4 años({self.ciclo_escolar.inicio})', fontsize=14)
+            ax.set_xticks([])
+            ax.legend(loc='upper right')
+            # Guardar grafico
+            buffer = io.BytesIO()
+            plt.savefig(buffer, format='png', bbox_inches='tight')
+            buffer.seek(0)
+            # Se guarda la instancia en el modelo
+            instancia, _ = MarginacionPoblacion345.objects.update_or_create(
+                ciclo_escolar_inicio=self.ciclo_escolar,
+                porcentaje_muy_bajo = self.datos["4"]["porcentaje_matricula_gm"]["muy bajo"],
+                porcentaje_bajo = self.datos["4"]["porcentaje_matricula_gm"]["bajo"],
+                porcentaje_medio = self.datos["4"]["porcentaje_matricula_gm"]["medio"],
+                porcentaje_alto = self.datos["4"]["porcentaje_matricula_gm"]["alto"],
+                porcentaje_muy_alto = self.datos["4"]["porcentaje_matricula_gm"]["muy alto"],
+                matricula_total = self.datos["4"]["matricula"]["total"],
+                proyeccion_conapo_poblacion_total=self.datos["4"]["poblacion"]["total"],
+                grupo_de_edad="4",
+                indicador = "AE4",
+                fecha_actualizacion=date.today()
+                )
+            nombre_del_grafico = f"marginacion_poblacion_edad_4_{self.ciclo_escolar.inicio}_{self.ciclo_escolar.fin}.png"
+            instancia.grafico.save(nombre_del_grafico, ContentFile(buffer.read()), save=True)
+            plt.close(fig)
+            buffer.close()
+        except Exception as e:
+            print(f'\033[31mHubo un error generando Gráfico Marginación por localidad para Población de 4 años para el ciclo escolar {self.ciclo_escolar.inicio}:\n\t{e}\033[0m')
+
 
     """
     ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ 
@@ -525,7 +687,7 @@ class CalculadoraCoberturaPreescolar:
             total_altura = [porcentajes_mujeres[0], porcentajes_hombres[0], porcentajes_restante[0]]
             acumulado = 0
             for i, valor in enumerate(total_altura):
-                ax.text(0, acumulado + valor / 2, f'{valor:.1f}%', ha='center', va='center', color='white', fontsize=10)
+                ax.text(0, acumulado + valor / 2, f'{valor:.2f}%', ha='center', va='center', color='white', fontsize=10)
                 acumulado += valor
 
             # Estética
@@ -561,6 +723,168 @@ class CalculadoraCoberturaPreescolar:
             buffer.close()
         except Exception as e:
             print(f'\033[31mHubo un error generando Gráfico Atención total a la Población de 5 años para el ciclo escolar {self.ciclo_escolar.inicio}:\n\t{e}\033[0m')
+
+
+    def extraer_datos_grado_marginacion_5_años(self):
+        try:
+            # Matricula de 3 años
+            data_frame_total_hombres_matricula_5_años = self.data_frame_final['Alumnos de 5 años hombres']
+            data_frame_total_mujeres_matricula_5_años = self.data_frame_final['Alumnos de 5 años mujeres']
+            # Grado de marginacion
+            print("-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*")
+            print(self.data_frame_final.head())
+            data_frame_grado_marginacion = self.data_frame_final['Grado de marginacion']
+            data_frame_matricula_total = pd.concat(
+                [
+                data_frame_total_mujeres_matricula_5_años,
+                data_frame_total_hombres_matricula_5_años,
+                data_frame_grado_marginacion],
+                axis=1
+            )
+            cols = [
+                'Alumnos de 5 años mujeres',
+                'Alumnos de 5 años hombres'
+            ]
+
+            data_frame_matricula_total['Matricula Total'] = data_frame_matricula_total[cols].sum(axis=1)
+            resultado = data_frame_matricula_total.groupby('Grado de marginacion')['Matricula Total'].sum()
+
+            self.datos["5"]["matricula_gm"]["muy bajo"] = resultado['Muy bajo']
+            self.datos["5"]["matricula_gm"]["bajo"] = resultado['Bajo']
+            self.datos["5"]["matricula_gm"]["medio"] = resultado['Medio']
+            self.datos["5"]["matricula_gm"]["alto"] = resultado['Alto']
+            self.datos["5"]["matricula_gm"]["muy alto"] = resultado['Muy alto']
+            self.datos["5"]["matricula_gm"]["total"] = (resultado['Muy bajo'] + resultado['Bajo'] +
+                                                        resultado['Medio'] + resultado['Alto'] + 
+                                                        resultado['Muy alto'])
+        except Exception as e:
+            print(f'\033[31mHubo un error extrayendo datos (grado de marginacion) para Atención total a la Población de 5 años para el ciclo escolar {self.ciclo_escolar.inicio}:\n\t{e}\033[0m')
+
+
+
+    def  calcular_grado_marginacion_5_años(self):
+        try:
+            print(f"\033[34mCalculando grado de marginacion para atención para población de 5 años para el ciclo escolar {self.ciclo_escolar.inicio}\033[0m")
+            # Atención a GM muy bajo = (matricula_gm_mb / poblacion_total) * 100
+            self.datos['5']['porcentaje_matricula_gm']['muy bajo'] = (
+                self.datos['5']['matricula_gm']['muy bajo'] / self.datos['5']['poblacion']['total'] ) * 100
+            # Bajo
+            self.datos['5']['porcentaje_matricula_gm']['bajo'] = (
+                self.datos['5']['matricula_gm']['bajo'] / self.datos['5']['poblacion']['total'] ) * 100
+            # Medio
+            self.datos['5']['porcentaje_matricula_gm']['medio'] = (
+                self.datos['5']['matricula_gm']['medio'] / self.datos['5']['poblacion']['total'] ) * 100
+            # Alto
+            self.datos['5']['porcentaje_matricula_gm']['alto'] = (
+                self.datos['5']['matricula_gm']['alto'] / self.datos['5']['poblacion']['total'] ) * 100
+            # Muy alto
+            self.datos['5']['porcentaje_matricula_gm']['muy alto'] = (
+                self.datos['5']['matricula_gm']['muy alto'] / self.datos['5']['poblacion']['total'] ) * 100
+            # Total
+            self.datos['5']['porcentaje_matricula_gm']['total'] = (
+                self.datos['5']['matricula_gm']['total'] / self.datos['5']['poblacion']['total'] ) * 100
+            
+            # Se muestran los datos
+            print(f'Atención grado de marginación muy bajo 5 años: {self.datos["5"]["porcentaje_matricula_gm"]["muy bajo"]}')
+            print(f'Atención grado de marginación bajo 5 años: {self.datos["5"]["porcentaje_matricula_gm"]["bajo"]}')
+            print(f'Atención grado de marginación medio 5 años: {self.datos["5"]["porcentaje_matricula_gm"]["medio"]}')
+            print(f'Atención grado de marginación alto 5 años: {self.datos["5"]["porcentaje_matricula_gm"]["alto"]}')
+            print(f'Atención grado de marginación muy alto 5 años: {self.datos["5"]["porcentaje_matricula_gm"]["muy alto"]}')
+            print(f'Atención total 5 años: {self.datos["5"]["porcentaje_matricula_gm"]["total"]}')
+        except Exception as e:
+            print(f'\033[31mHubo un error Calculando Grado de Marginacion para Atención total a la Población de 5 años para el ciclo escolar {self.ciclo_escolar.inicio}:\n\t{e}\033[0m')
+
+
+    def generar_grafico_grado_marginacion_atencion_individual_poblacion_5_años(self):
+        try:
+            print(f"\033[34mGenerando Gráfico Grado de Marginacion para Atención individual a la Población total de 5 años para el ciclo escolar {self.ciclo_escolar.inicio}\033[0m")
+            # Valores ya calculados
+            valores_muy_bajo = self.datos["5"]["porcentaje_matricula_gm"]["muy bajo"]
+            valores_bajo = self.datos["5"]["porcentaje_matricula_gm"]["bajo"]
+            valores_medio = self.datos["5"]["porcentaje_matricula_gm"]["medio"]
+            valores_alto = self.datos["5"]["porcentaje_matricula_gm"]["alto"]
+            valores_muy_alto = self.datos["5"]["porcentaje_matricula_gm"]["muy alto"]
+
+            valores_sin_atencion = 100 - (valores_muy_bajo + valores_bajo + valores_medio + valores_alto + valores_muy_alto)
+            # Datos para gráfica apilada
+            categorias = ['Atención - Grados de marginación']
+            porcentajes_muy_bajo = [valores_muy_bajo]
+            porcentajes_bajo = [valores_bajo]
+            porcentajes_medio = [valores_medio]
+            porcentajes_alto = [valores_alto]
+            porcentajes_muy_alto = [valores_muy_alto]
+            porcentajes_restante = [valores_sin_atencion]
+
+            # Paleta de colores estilo "mako"
+            colores = sns.color_palette("mako", n_colors=6)
+            x = np.arange(len(categorias))
+            width = 0.13
+            # Creación de gráfico
+            fig, ax = plt.subplots(figsize=(6, 6))
+            # Figuras
+            ax.bar(x - 2.5*width, porcentajes_muy_bajo, width,
+                    label='Muy bajo', color = colores[0])
+            
+            ax.bar(x - 1.5*width, porcentajes_bajo, width,
+                   label='Bajo', color = colores[1])
+            
+            ax.bar(x - 0.5*width, porcentajes_medio, width,
+                   label='Medio', color = colores[2])
+            
+            ax.bar(x + 0.5*width, porcentajes_alto, width,
+                   label='Alto', color = colores[3])
+            
+            ax.bar(x + 1.5*width, porcentajes_muy_alto, width,
+                   label = 'Muy Alto', color = colores[4])
+                   
+            ax.bar(x + 2.5*width, porcentajes_restante, width,
+                   label = 'Sin atención', color = colores[5])
+
+            for rect in ax.patches:
+                height = rect.get_height()
+                if height >= 0:
+                    ax.text(
+                        rect.get_x() +  rect.get_width() / 2,
+                        height + 1,
+                        f'{height:.2f}%',
+                        ha='center',
+                        va='bottom',
+                        color='black', 
+                        fontsize=10
+                    )
+
+            # Estetica
+            ax.set_ylim(0, 110)
+            ax.set_ylabel('Porcentaje')
+            ax.set_xlabel('Grados de marginación')
+            ax.set_title(f'Marginación por localidad para Atención de población de 5 años({self.ciclo_escolar.inicio})', fontsize=14)
+            ax.set_xticks([])
+            ax.legend(loc='upper right')
+            # Guardar grafico
+            buffer = io.BytesIO()
+            plt.savefig(buffer, format='png', bbox_inches='tight')
+            buffer.seek(0)
+            # Se guarda la instancia en el modelo
+            instancia, _ = MarginacionPoblacion345.objects.update_or_create(
+                ciclo_escolar_inicio=self.ciclo_escolar,
+                porcentaje_muy_bajo = self.datos["5"]["porcentaje_matricula_gm"]["muy bajo"],
+                porcentaje_bajo = self.datos["5"]["porcentaje_matricula_gm"]["bajo"],
+                porcentaje_medio = self.datos["5"]["porcentaje_matricula_gm"]["medio"],
+                porcentaje_alto = self.datos["5"]["porcentaje_matricula_gm"]["alto"],
+                porcentaje_muy_alto = self.datos["5"]["porcentaje_matricula_gm"]["muy alto"],
+                matricula_total = self.datos["5"]["matricula"]["total"],
+                proyeccion_conapo_poblacion_total=self.datos["5"]["poblacion"]["total"],
+                grupo_de_edad="5",
+                indicador = "AE5",
+                fecha_actualizacion=date.today()
+                )
+            nombre_del_grafico = f"marginacion_poblacion_edad_5_{self.ciclo_escolar.inicio}_{self.ciclo_escolar.fin}.png"
+            instancia.grafico.save(nombre_del_grafico, ContentFile(buffer.read()), save=True)
+            plt.close(fig)
+            buffer.close()
+        except Exception as e:
+            print(f'\033[31mHubo un error generando Gráfico Marginación por localidad para Población de 5 años para el ciclo escolar {self.ciclo_escolar.inicio}:\n\t{e}\033[0m')
+
 
     """
     ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ ⋆⁺₊⋆ 
@@ -850,6 +1174,7 @@ def principal(ciclo_escolar_solicitado, datos_preescolar, proyeccion_poblacional
     calculadora.extraer_datos_3_años()
     calculadora.calcular_atencion_3_años()
     calculadora.generar_grafico_atencion_individual_poblacion_3_años()
+
     calculadora.extraer_datos_grado_marginacion_3_años()
     calculadora.calcular_grado_marginacion_3_años()
     calculadora.generar_grafico_grado_marginacion_atencion_individual_poblacion_3_años()
@@ -857,10 +1182,19 @@ def principal(ciclo_escolar_solicitado, datos_preescolar, proyeccion_poblacional
     calculadora.extraer_datos_4_años()
     calculadora.calcular_atencion_4_años()
     calculadora.generar_grafico_atencion_individual_poblacion_4_años()
+
+    calculadora.extraer_datos_grado_marginacion_4_años()
+    calculadora.calcular_grado_marginacion_4_años()
+    calculadora.generar_grafico_grado_marginacion_atencion_individual_poblacion_4_años()
+
     # 5 años
     calculadora.extraer_datos_5_años()
     calculadora.calcular_atencion_5_años()
     calculadora.generar_grafico_atencion_individual_poblacion_5_años()
+
+    calculadora.extraer_datos_grado_marginacion_5_años()
+    calculadora.calcular_grado_marginacion_5_años()
+    calculadora.generar_grafico_grado_marginacion_atencion_individual_poblacion_5_años()
 
 # TODO: Generar logica para actualizar registros ya existentes
 

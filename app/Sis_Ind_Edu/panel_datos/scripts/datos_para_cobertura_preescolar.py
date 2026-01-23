@@ -101,7 +101,6 @@ class CoberturaEscolarPreescolar:
                 # Se obtiene la ruta real del archivo
                 direccion_ed_inicial = ed_inicial.archivo.path
                 # Se corrobora que la ruta exista
-                print("\n\n\n antes del error")
                 if default_storage.exists(direccion_ed_inicial):
                     # Si existe entonces se intenta leer
                     try:
