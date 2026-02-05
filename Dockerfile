@@ -15,8 +15,15 @@ RUN apt-get update && apt-get install -y \
     pkg-config \
     gcc \
     iputils-ping \
-    net-tools && \
-    apt-get clean
+    net-tools \
+    libfreetype6-dev \
+    libpng-dev \
+    libjpeg-dev \
+    libopenblas-dev \
+    liblapack-dev \
+    python3-dev \
+    build-essential \
+    && apt-get clean
 
 
 # Directorio de trabajo

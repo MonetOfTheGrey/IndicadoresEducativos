@@ -1,0 +1,105 @@
+{% extends "blank.html" %}
+{% block funcionalidad %}
+                <div class="container-fluid">
+                    <h3 class="text-dark mb-4">Algoritmos de indicadores</h3>
+                    <div class="card shadow" style="margin-top: 1%;">
+                        <div class="card-header py-3">
+                            <p class="text-primary m-0 fw-bold">Formato para actualizar Algoritmos de indicadores</p>
+                        </div>
+                        <div class="card-body">
+<!----------------------------------Comienza la tabla de formulario---------------------------------->
+<form method="post" action="{% url 'subir_algoritmo' %}" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="accordion mb-3" id="tablaAccordion">
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingTabla">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTabla" aria-expanded="false" aria-controls="collapseTabla">
+                    Formulario de Algoritmos
+                </button>
+            </h2>
+            <div id="collapseTabla" class="accordion-collapse collapse" aria-labelledby="headingTabla" data-bs-parent="#tablaAccordion">
+                <div class="accordion-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Indicador</th>
+                                <th>Nombre</th>
+                                <th>Algoritmo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for indicador in indicadores_formulario %}
+                            <tr>
+                                <td>
+                                    {{ indicador.indicador }}
+                                    <input type="hidden" name="indicador_{{ forloop.counter }}" value="{{ indicador.indicador }}">
+                                </td>
+                                <td>
+                                    {{ indicador.nombre }}
+                                    <input type="hidden" name="nombre_{{ forloop.counter }}" value="{{ indicador.nombre }}">
+                                </td>
+                                <td>
+                                    <input type="file" name="archivo_{{ forloop.counter }}" class="form-control">
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td><strong>Indicador</strong></td>
+                                <td><strong>Nombre</strong></td>
+                                <td><strong>Algoritmo</strong></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header d-flex justify-content-center py-3">
+            <button type="submit" class="btn btn-primary" style="background: var(--bs-warning);">
+                Agregar todo
+            </button>
+        </div>
+    </div>
+</form>
+<!----------------------------------Termina la tabla de formulario---------------------------------->
+                            <div>
+                            </div>
+                        </div>
+                    </div><!-- Inicia la tabla de datos ya existentes -->
+<div class="card shadow" style="margin-top: 1%;">
+    <div class="card-header py-3">
+        <p class="text-primary m-0 fw-bold">Información de Algoritmos existentes</p>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive mt-2 table" id="dataTable-2">
+            <table class="table my-0" id="dataTable">
+                <thead>
+                    <tr>
+                        <th>Indicador</th>
+                        <th>Algoritmo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for indicador_existente in indicadores_existentes %}
+                    <tr>
+                        <td>{{ indicador_existente.get_indicador_display  }}</td>
+                        <td>{{ indicador_existente.algoritmo }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td><strong>Indicador</strong></td>
+                        <td><strong>Algoritmo</strong></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- Termina la tabla de datos ya existentes -->
+                </div>
+{% endblock %}
